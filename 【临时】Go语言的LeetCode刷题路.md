@@ -143,3 +143,21 @@ func max(a int, b int) int {
 ```
 
 
+# KMP 算法个人理解
+首先 KMP 算法可以把时间复杂度降低至 O(m*n) 的原因是 主串的指针不必再回溯. 
+可以这么做的理由是 在已经匹配的部分里, 
+
+```java
+// next数组求法
+void getNext (char[] ch, int length, int[] next) {
+    next[1] = 0;
+    int i = 1, j = 0;
+    while (i <= length) {
+        if (j == 0 || ch[i] == ch[j]) {
+            next[++i] = ++j
+        } else {
+            j = next[j]
+        }
+    }
+}
+```

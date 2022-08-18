@@ -1,4 +1,4 @@
-# Go语言教程
+# Go语言快速入门
 # 第一章
 **使用Printf来格式化输出**
 Printf的第一个参数必须是字符串.
@@ -294,8 +294,12 @@ map [string] int
 
 如果对应的key不存在, 就返回value类型的零值. 
 当然这种做法不适应于业务逻辑判断;
-go里面提供了 ",与ok" 的写法 
-+ [ ] 暂时不知道怎么写
+go里面提供了 ",与ok" 的写法, 底层就是 go的多返回值机制
+例如 go的错误处理机制: if value, ok := function{...}
+检测映射中是否存在一个键值：key1在映射map1中是否有值？
+if _, ok := m[another]; ok {
+       //进入处理
+}
 
 map的值**不会被复制**
 类似Java的引用类型.
@@ -467,24 +471,57 @@ error是一个内置类型, 不讲.
 **goroutine**
 特点
 ![Img](./res/drawable/goroutine特点.png)
-
+Go从语言层面就支持 并发编程. 每一个并发的执行单元叫作一个goroutine. 
 使用go关键字就可以开启一个goroutine. 
 
+一个有趣的小demo: 在计算斐波那契数列的时候使用一个 协程 来表示程序正在运行.
+这也是一个快速入门的案例
+```go
+func main() {
+    go spinner(100 * time.Millisecond)
+    const n = 45
+    fibN := fib(n) // slow
+    fmt.Printf("\rFibonacci(%d) = %d\n", n, fibN)
+}
+
+func spinner(delay time.Duration) {
+    for {
+        for _, r := range `-\|/` {
+            fmt.Printf("\r%c", r)
+            time.Sleep(delay)
+        }
+    }
+}
+
+func fib(x int) int {
+    if x < 2 {
+        return x
+    }
+    return fib(x-1) + fib(x-2)
+}
+```
 有点类似kotlin的routine, 当主goroutine(?)停止时所有的goroutine都会停止. 
+不过和 kotlin不同的是, goroutine 除了从主函数退出或者直接终止程序之外，没有其它的编程方法能够让一个goroutine来打断另一个的执行.
+不过go肯定提供了相关的机制来实现这个操作:
 
 每次使用go都会产生一个新的goroutine. 这些goroutine在底层并非真的并行执行(计算机的底层限制).
 
 类似函数传值, goroutine也是值传递.
 
 go的channel(通道)机制
+channel 就是 goroutine的通信机制
 **channel**
 - 使用channel可以在多个goroutine里面安全的传值.
 - channel也是一种类型, 可以用作变量, 函数参数, 结构体字段...
-- 创建channel使用make函数, 并指定传输的类型
+- 为了类型安全, 你必须创建使用make函数来创建channel, 并指定传输的类型
 ```go
 // 创建一个可以传输int类型数据的通道
 c := make(chan int)
 ```
+
+## channel的一些细节
+- 和map类似，channel也对应一个make创建的底层数据结构的引用。当我们复制一个channel或用于函数参数传递时，我们只是拷贝了一个channel引用，因此调用者和被调用者将引用同一个channel对象。和其它的引用类型一样，channel的零值也是nil。
+- 两个相同类型的channel可以使用==运算符比较。如果两个channel引用的是相同的对象，那么比较的结果为真。一个channel也可以和nil进行比较。
 
 **通过channel发送和接受数据**
 使用 <- 操作符 来像channel里面发送或者接受数据.
@@ -495,6 +532,14 @@ c <- 99
 port :=<- c
 ```
 
+**无缓存的 Channels**
+顾名思义, no buffered channel 内部没有缓存, 一个基于无缓存Channels的发送操作将导致发送者goroutine阻塞, 在有另一个 goroutine 对同一个 channel 进行了 接受操作之后, 才会解除阻塞. 
+因为这个特性, 无缓存通道一般也被叫做 同步 channel, 用于做同步操作. 
+这里是go语言圣经的一段引用: 
+> 基于无缓存Channels的发送和接收操作将导致两个goroutine做一次同步操作。因为这个原因，无缓存Channels有时候也被称为同步Channels。当通过一个无缓存Channels发送数据时，接收者收到数据发生在再次唤醒唤醒发送者goroutine之前（译注：happens before，这是Go语言并发内存模型的一个关键术语！）。
+
+我个人的理解是, 接受的goroutine接受channel数据在前, 发送数据的goroutine 被唤醒在后. 这个并不是基于时间描述的, 而是一种基于阻塞的同步实现.
+使用
 **使用select处理多个通道**
 一个通道只能处理类型相同的值.
 

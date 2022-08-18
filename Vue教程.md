@@ -238,4 +238,19 @@ const vm = new Vue({
 用函数代替一个对象.
 
 ## 监视属性
-vue的devtools的属性展示有一个小问题: 如果 
+vue的devtools的属性展示有一个小问题: 如果 页面上的属性没有使用的话, 那么Vue Devtools里面的 computed 也不会在tool里面体现了.
+
+监视属性: 在vm实例里面配置 watch, 里面写上你要监视的 属性名.
+vue会为其配置 handler()方法, 当 属性发生变化的时候调用.
+
+除此之外, watch 有一个 immediate 属性, 默认为false, 意思是 handler 函数是否 立即执行.
+...
+
+除了直接在vue创建时配置之外, 也可以使用vm的引用 来保证后序可以自定义控制: 
+```javascript
+vm.$watch('isHot', {
+    // 和配置时一样
+})
+```
+
+总结: watch 可以监视 data 或者 computed 里面已有的属性, 
