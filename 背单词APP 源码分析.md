@@ -168,6 +168,7 @@ FragmentMe的功能应该也差不多... 那么我暂时先不看了
 + [ ] 我现在的问题大概是, 数据库的数据来源了...
 + [ ] 一个小 bug, 第一次点击 开始学单词之后然后马上退出来, 这个按钮会无法再次点击, 现在猜测和一个 field isOnClick 有关系.
 + [ ] 进度: LearnWordActivity
++ [ ] LearnWordActivity页面的那个更新单词进度部分的代码看看是怎么实现的
 
 ## ChooseWordActivity
 布局很简单: 相对布局设置 顶部的 导航
@@ -183,8 +184,127 @@ FragmentMe的功能应该也差不多... 那么我暂时先不看了
 这个没仔细分析, 毕竟不重要
 
 ## LearnWordActivity
-这个就是单词的学习的界面了, 这个 UI的设计可以好好学学
-+ [ ] 可以抽个时间来看看 这个app的 UI设计, 我是真的很喜欢这种风格的软件
+在主页点击了开始背单词之后会进入的页面: 
+功能大概是: 先复习单词, 然后学习新单词.
+
++ [ ] 写了一点注释, 不过需要对应的
+
+## 这个 A依赖一个对应的 WordController
+WordController是 Word 这个实体类的控制器，所以
+
+## Word
+这个是用于存储进入关系型数据库的实体类的数据，简单说就是对应的ORM映射。
+介绍一下字段：就是说每一个单词应该有：
+ID：唯一约束，但是我不知道 sqlite的主键规则，不知道他是不是物理层面的主键；
+word：单词本身的string
+ukPhone：英国音标，string
+usPhone：美国音标，string
+。。。
+因为这些字段太长我不可能一个一个去看的，毕竟并不是我自己写的，所以拷贝了一下代码，注释很清晰
+
+顺便还给它（每个单词）绑定了一个深度掌握的功能：也写在注释里面了，所以在需要的时候我再去看
+```java
+public class Word extends LitePalSupport {
+
+    // ID
+    @Column(unique = true)
+    private int wordId;
+
+    // 单词
+    private String word;
+
+    // 英国音标
+    private String ukPhone;
+
+    // 美国音标
+    private String usPhone;
+
+    // 巧记
+    private String remMethod;
+
+    // 图片(网址)
+    private String picAddress;
+
+    // 自定义照片
+    private byte[] picCustom;
+
+    // 自定义备注
+    private String remark;
+
+    // 设置归属
+    private String belongBook;
+
+    // 是否收藏
+    @Column(defaultValue = "0")
+    private int isCollected;
+
+    // 是否是简单词
+    @Column(defaultValue = "0")
+    private int isEasy;
+
+    // 是否是刚学过
+    @Column(defaultValue = "0")
+    private int justLearned;
+
+    /*
+     * 以下是学习复习专用的
+     */
+
+    // 是否需要学习
+    @Column(defaultValue = "0")
+    private int isNeedLearned;
+
+    // 需要学习的时间（以天为单位）
+    private long needLearnDate;
+
+    // 需要复习的时间（以天为单位）
+    private long needReviewDate;
+
+    // 是否学习过
+    @Column(defaultValue = "0")
+    private int isLearned;
+
+    // 总计检验次数
+    @Column(defaultValue = "0")
+    private int examNum;
+
+    // 总计检验答对次数
+    @Column(defaultValue = "0")
+    private int examRightNum;
+
+    // 上次已掌握时间（时间戳）
+    @Column(defaultValue = "0")
+    private long lastMasterTime;
+
+    // 上次复习的时间（时间戳）
+    @Column(defaultValue = "0")
+    private long lastReviewTime;
+
+    // 掌握程度（总计10分）
+    @Column(defaultValue = "0")
+    private int masterDegree;
+
+    // 深度掌握次数
+    /*
+     * 前提：掌握程度已达到10
+     * 当深度次数为0时，记下次复习时间=上次已掌握时间+4天，若及时复习，更新上次已掌握时间
+     * 当深度次数为1时，记下次复习时间=上次已掌握时间+3天，若及时复习，更新上次已掌握时间
+     * 当深度次数为2时，记下次复习时间=上次已掌握时间+8天，若及时复习，更新上次已掌握时间
+     * 当深度次数为3时，记已经完全掌握
+     *
+     * 检测哪些单词未及时深度复习：
+     * 首先单词必须掌握程度=10，其次单词上次掌握的时间与现在的时间进行对比
+     * （1）要是深度次数为0，且两者时间之差为大于4天，说明未深度复习
+     * （2）要是深度次数为1，且两者时间之差为大于3天，说明未深度复习
+     * （3）要是深度次数为2，且两者时间之差为大于8天，说明未深度复习
+     * （#）若未及时深度复习，一律将其单词掌握程度-2（10→8）
+     *
+     * */
+    @Column(defaultValue = "0")
+    private int deepMasterTimes;
+
+```
+
 
 # 特定功能的实现
 ## 全局获取 Context
@@ -201,47 +321,4 @@ FragmentMe的功能应该也差不多... 那么我暂时先不看了
 ```java
 @SuppressLint("StaticFieldLeak")
 ```
-
-## 复习一下 RecyclerView的用法
-这个玩意可以说我是见识过很多次了, 不过我一直没有完全搞懂过, 看看今天我能不能完全搞懂.
-
-一. 首先如果需要使用RView的话, 必须先在 布局文件中使用, 和其他的UI控件一样, 需要指定对应的宽和高, 这样他就只会在指定的区域显示.
-二. 为 RView 准备适配器: 
-> 适配器需要继承 RecyclerView.Adaper, 而且需要定义一个内部类xxxAdaper.ViewHolder, 并指定适配器的泛型为 这个内部类. 
-> 内部类 ViewHolder需要继承 RecyclerView内部的 ViewHolder
-
-以一个展示水果列表的适配器为例: 
-```kotlin
-class FruitAdapter(val fruitList: List<Fruit>) :
-    RecyclerView.Adapter<FruitAdapter.ViewHolder>() {
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val fruitImage: ImageView = view.findViewById(R.id.fruitImage)
-        val fruitName: TextView = view.findViewById(R.id.fruitName)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fruit_item, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val fruit = fruitList[position]
-        holder.fruitImage.setImageResource(fruit.imageId)
-        holder.fruitName.text = fruit.name
-    }
-
-    override fun getItemCount() = fruitList.size
-}
-
-```
-
-
-关于这个类的解析: 
-> ViewHolder: 顾名思义, 这个类是用来缓存 UI控件的**对象实例**的, 在这个类的内部定义你需要在Recycler里面需要用到的 UI控件.
-> 它的主构造函数里面传入一个View参数, 通常是你需要的 UI控件的父元素布局, 这样就能通过 findViewById 访问他们的引用了.
-
-> Adapter本身一般也需要传入参数, 一般是 **待展示的数据源**.
-
-算了, 大概需要的时候我再去看, 基本就是模式代码, 没必要摸得那么清楚. 
 

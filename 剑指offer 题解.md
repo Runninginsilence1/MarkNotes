@@ -261,3 +261,166 @@ func mirrorTree(root *TreeNode) *TreeNode {
 }
 ```
 
+# 二叉树的序列化与反序列化
+
+如果里面**没有重复结点**的话就可以通过 重建二叉树那个题目的方式存储两个数组作为序列化的结果了的
+
+采用层序遍历的方式, 通过存储 null 来判断结点是否有子节点
+
+反序列化的过程大概是: 
+得到序列化后的数组, 
+使用一个队列存储出队过程中的结果, 
+队列的初始化存入
+
+在不停的出队的循环中: 
+1. 结点出队
+1. 构建左右结点, 如果 curNode的孩子结点不为null, 就放入队列, i++ 和 i++
+1. 重复以上过程, 直到队列为空
+
+# 字符串的排列
+全排列的问题, 虽然他说是**一个n叉树的问题**, 不过我是一点头绪都没有啊...
+
+# 摩尔投票法
+**最优解**是: 摩尔投票法
+用的好像是一种**抵消**的思想
+
+```go
+// 摩尔投票法
+func majorityElement(nums []int) int {
+    x, sum := nums[0], 0
+    for i := 0; i < len(nums); i++ {
+        if sum == 0 {
+            x = nums[i]
+            sum += 1
+        } else {
+            if x == nums[i] {
+                sum++
+            } else {
+                sum--
+            }
+        }
+    }
+
+    return x
+}
+```
+
+# 最小的前k个数
+做了这个题目最大的收获竟然是 写笔记对完成代码很有帮助!
+
+因为是k个数, 想到快排的 partition过程 正好是根据 pivot 把数组分为两组的过程, 如果左区间(小于 pivot的数字) 的区间大小正好等于 k, 那么他就符合题目的条件了. 
+
+```go
+func getLeastNumbers(arr []int, k int) []int {
+	if arr == nil || len(arr) <= 0 || k == 0 {
+		return []int{}
+	}
+	var partition func([]int, int, int) int
+	// 定义 partition 函数
+	partition = func(nums []int, left int, right int) (bound int) {
+		// pivot will be right
+		// May wrong: 使用了 right作为基准值, 可能有地方出错了
+		pivot := nums[left]
+
+		// 双指针内部开始进行分割
+		i, j := left+1, right
+
+		for i < j {
+			for i <= j && nums[i] <= pivot {
+				i++
+			}
+			for i <= j && nums[j] >= pivot {
+				j--
+			}
+			if i >= j {
+				break
+			}
+
+			// 下面进行 partition的过程
+			nums[i], nums[j] = nums[j], nums[i]
+		}
+
+		// 循环结束后, 需要调整pivot到正确的位置
+		// 应该是我这里的调整写错了
+		nums[left] = nums[j]
+		nums[j] = pivot
+		// 这么写其实代码可读性会烂那么一点, 不过我可以试试
+		bound = j
+		return
+	}
+	// partition 函数定义结束
+	// 定义快排 函数
+	var quickSort func([]int, int, int, int) []int
+	quickSort = func(nums []int, left int, right, k int) []int {
+		// 个人想法哈哈
+		bound := partition(nums, left, right)
+		if bound+1 == k {
+			return nums[0:k]
+		}
+		if bound+1 > k {
+			return quickSort(nums, left, bound-1, k)
+		} else {
+			return quickSort(nums, bound+1, right, k)
+		}
+	}
+	// 快排 函数定义结束
+	return quickSort(arr, 0, len(arr)-1, k)
+}
+
+```
+
+
+# 连续子数组的最大和
+一个经典的动态规划的案例, 我也知道很多. 
+**最值问题**一般就是用DP来求解. 
+动态规划的解题一般三步走: 
+1. 知道dp数组的含义, 知道每次回溯的时候哪些是没有必要重复计算的重要数据;
+1. 找出 dp之间的关系式, 很类似数学归纳法的那个步骤;
+1. 知道初始值怎么求;
+
+这个题目的思路很简单, 直接贴代码了
+```go
+func maxSubArray(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	var max func(int, int) int
+	max = func(i int, i2 int) int {
+		if i > i2 {
+			return i
+		}
+		return i2
+	}
+	// Shit, I forget the true meaning of this problem
+	maxNum := nums[0]
+	//dp := make([]int, len(nums))
+	dp := nums[0]
+	// 关系式: dp[i] = max(nums[i], dp[i-1] + nums[i])
+
+	for i := 1; i < len(nums); i++ {
+		dp = max(nums[i], nums[i] + dp)
+		maxNum = max(maxNum, dp)
+	}
+
+	return maxNum
+}
+
+```
+
+# 草稿区域
+## 这个动态规划的整理的不错...
+动态规划容易出现的问题: 
+- 初始值找不对
+
+**动态规划的优化**
+动态规划的题目可以很难, 这里总结的是 一般的二维dp数组优化成 一维的情况: 
+就是 如果dp\[i]\[j]的关系式: 
+```go
+dp[i][j] = dp[i-1][j] + dp[i][j-1]
+// 或者
+dp[i][j] = dp[i-1][j] + dp[i][j-1] + dp[i-1][j-1]
+```
+那么**分别**可以优化成 
+- dp\[i] = dp\[i-1] + dp\[i]
+- dp\[i] = dp\[i-1] + dp\[i] + pre
+
