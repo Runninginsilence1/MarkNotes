@@ -322,3 +322,94 @@ public class Word extends LitePalSupport {
 @SuppressLint("StaticFieldLeak")
 ```
 
+
+
+
+# 以前我写的东西，先暂时存在这里
+# 背单词的APP源码分析
+
+通过配置清单中的文件：WelcomeA是启动Activity，会在里面进行相对应的初始化判断，均通过会直接进入主页
+这些代码我应该都已经分析过了
+
+软件第一次启动时会要求授予权限...
+WelcomeA的结构分析：
+首先A本身继承了一个基础类型：BaseAc...
+
+基类负责定义共同的方法以及所有的A的相关管理
+#### onCreate方法：
+1. 首先用内置的Log类打印日志，显示当前的A的名称：getClass().getSimpleName()
+
+2. 进行了一个if判断：定义了一个ConfigData的类来进行应用的配置文件的缓存，后面再说( todo
+调用getIsNight()方法判断当前是浅色模式还是深色模式：
+ImmersionBar是一个支持安卓4.0以上的第三方库，可以将应用的通知栏设置成沉浸式：
+
+3. 之后将该BA（主要是它的子类）加入到一个全局的Activity管理器中（由Util包中的ActivityCollector类实现），方便统一管理：这个工具类的源码到时候再说（ todo
+
+4. 调用了一个方法：
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+		注释为：防止输入法将正常布局顶上去
+这是一个Activity自带的方法：具体细节到时候可以慢慢分析 todo
+
+以上，这就是基类重写的onCreate()方法，概括一下就是：设置沉浸式状态栏；防止输入法影响布局，保证全局的Activity能被统一管理。
+
+#### onDestroy()方法
+很简单，保证加入ActivityCollector的移除逻辑即可。
+
+#### 权限管理
+Andr oid 6.0 及以上系统在使用危险权限时必须进行运行时权限处理：
+相关方法：requestRunPermission、onRequestPermissionsResult（这个是教材里面介绍到了的方法）
+
+requestRunPermission：这个方法是作者自己定义的：todo 
+两个参数：String[] 申请哪些权限；PermissionListener 自定义的接口，方法是已授权和未授权？需要重写
+下面的部分涉及到6.0之后的动态授权的相关方法调用：简而言之是：
+ContextCompat.checkSelfPermission()方法传入权限名，得到的返回结果等于PackageManager.PERMISSION_GRANTED代表已授权，否则需要去申请权限，这里先说到这里；
+使用if else语句判断用户是够授权，没有则加入	一个新集合中等待用户进行授权；等待数组中的权限全部判断完成；
+
+下面的条件判断有没有未进行授权的权限，有则去进行授权...
+否则代表全部都授权：然后mListener的onGranted方法调用，这里的流程大概是... todo
+申请权限使用requestPermissions()方法，第一个参数要求是Activity 的实例；第二个参数
+是一个String数组，我们把要申请的权限名放在数组中即可；第三个参数是请求码，只要是唯
+一值就可以。
+
+在完成权限获取后会回调方法：onRequestPermissionsResult() todo 回调方法的逻辑暂时忽略
+
+#### 服务管理
+下一条是一个静态方法：isServiceExisted
+实例化一个活动管理器，然后获得当前所有服务的数据放入到集合中；
+如果不大于0则返回false；
+true的返回逻辑说实话没看懂，所以可以待会再说 todo
+不过可以简单说一下：是需要服务名和方法传入的类名一致才会进行返回...
+
+
+#### 数据监测
+下一个还是静态方法：
+prepareDailyData（）：
+首先先获取当前的时间（代码实现细节不分析）
+LitePal是在Github 上开源的一款Android数据库框架，具体细节暂时不分析 todo
+
+返回一个泛型为DailyData的List，泛型一个数据模型（实体类？应该）
+
+下面条件判断：
+如果这个List为空，调用基类中的另一个方法：analyseJsonAndSave();
+或者里面第一项[0]的某个属性为null，那也调用这个方法；
+
+#### analyseJsonAndSave() 方法
+暂时不分析，只知道数据监控会调用这个方法 todo
+
+#### 其他方法
+有三个和框架有关，暂时不分析！
+还有一个noNight表示不支持夜间模式，暂不分析 todo
+
+
+至此，基类分析完毕。主要负责为全局活动添加功能：权限管理、服务管理、数据监测
+
+
+## 启动页 WelcomeA  这个A是负责渲染随机壁纸和激励语句的A
+解析一下W的属性：handler
+重写消息的处理方法：
+似乎是处理欢迎页的壁纸和激励语句的方法... 暂时不分析 todo
+
+
+# 0519 单词
+
+
