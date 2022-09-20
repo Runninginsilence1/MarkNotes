@@ -500,19 +500,20 @@ func fib(x int) int {
     return fib(x-1) + fib(x-2)
 }
 ```
-有点类似kotlin的routine, 当主goroutine(?)停止时所有的goroutine都会停止. 
-不过和 kotlin不同的是, goroutine 除了从主函数退出或者直接终止程序之外，没有其它的编程方法能够让一个goroutine来打断另一个的执行.
+有点类似kotlin的routine, 当**主goroutine(?)停止时**所有的goroutine都会停止. 
+不过和 kotlin不同的是, goroutine 除了主函数退出或者直接终止程序之外，没有其它的编程方法能够让一个goroutine来打断另一个的执行.
+goroutine 之间**不能直接彼此影响**；
 不过go肯定提供了相关的机制来实现这个操作:
 
 每次使用go都会产生一个新的goroutine. 这些goroutine在底层并非真的并行执行(计算机的底层限制).
 
 类似函数传值, goroutine也是值传递.
 
-go的channel(通道)机制
+## go的channel(通道)机制
 channel 就是 goroutine的通信机制
 **channel**
 - 使用channel可以在多个goroutine里面安全的传值.
-- channel也是一种类型, 可以用作变量, 函数参数, 结构体字段...
+- channel也是一种类型, 可以用作变量, 函数参数, 结构体字段... 我个人的理解：**channel是一个数据容器或者数据通道**
 - 为了类型安全, 你必须创建使用make函数来创建channel, 并指定传输的类型
 ```go
 // 创建一个可以传输int类型数据的通道
@@ -539,7 +540,8 @@ port :=<- c
 > 基于无缓存Channels的发送和接收操作将导致两个goroutine做一次同步操作。因为这个原因，无缓存Channels有时候也被称为同步Channels。当通过一个无缓存Channels发送数据时，接收者收到数据发生在再次唤醒唤醒发送者goroutine之前（译注：happens before，这是Go语言并发内存模型的一个关键术语！）。
 
 我个人的理解是, 接受的goroutine接受channel数据在前, 发送数据的goroutine 被唤醒在后. 这个并不是基于时间描述的, 而是一种基于阻塞的同步实现.
-使用
+
+
 **使用select处理多个通道**
 一个通道只能处理类型相同的值.
 

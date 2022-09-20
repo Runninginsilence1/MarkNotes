@@ -145,3 +145,78 @@ response.setHeader("location", "资源B的路径");
 
 如果到时候有需要，我就去看看。。。
 有现成的框架可以直接使用：commons-io
+
+# Cookie 和 Session的使用和原理
+## Cookie
+Cookie就是基于 HTTP的、存储在头部的、用来实现会话中数据共享的东西。
+
+很简单，所以只贴一下 api：
+![Img](./res/drawable/Cookie的基本使用.png)
+
+设置 Cookie的存储时间；
+cookie.setMaxAge(int seconds);
+持久化的文件在哪？在 Chrome里面可以看到
+
+**存储中文**
+不能。
+所以可以通过转码（比如URL编码）来存储。
+
+## Session
+这是服务器里面的数据共享机制；
+![Img](./res/drawable/Session的基本API.png)
+功能和 Cookie是一样的。
+不过因为是在服务端中，所以会定位和设计上有点不一样。
+
+在一次会话中多次获取 Session要保证对应的 Session是正确的：通过设置 id值和 结合 cookie来实现；
+Cookie: JSESSION = ...
+
+### 钝化，活化和销毁
+和 cookie不同，session要保证只要客户端不断开会话就不能失效，所以 session是默认会持久化的。由服务器软件控制。序列化和反序列化的过程分别叫做钝化和活化。
+
+销毁：
+如果客户端断开连接，可以认为会话结束，一般销毁 session：
+自动销毁和调用 invalidate()方法手动销毁。
+后者可以适用 Logout的业务的实现。
+
+## 小结
+Cookie和Session的区别
+![Img](./res/drawable/Cookie和Session的区别.png)
+
+# Filter使用
+结论：JavaEE一个内置的中间件。负责**拦截访问资源的请求**（一般）。
+
+和 Servlet的用法很类似
+
+## 使用细节
+两个：注解配置的url是资源的路径而不是url，urlPattern的方式和Servlet的是一样的；还有一个是过滤器链，就是**过滤器串起来**，按照 ClassName的**字符串顺序生效**
+
+完，别嫌弃讲得很笼统，因为真的很简单，视频也不长。
+
+# AJAX 异步的JavaScript和XML
+我的理解应该就是一个 前端和后端进行数据交互的工具；
+以前的jsp就通过Servlet获取数据然后进行展示；
+那么现在的话 通过 ajax。    
+
+使用 **Ajax好像可以实现初步的前后端分离**
+
+## 作用
+- 与服务器进行数据交换
+- 实现**异步交互**：例如搜索引擎的**搜索提示功能**，注册的**用户名的可用校验**
+
+## 快速入门
+可以在 w3cschool等地方复用现成的ajax的代码
+如果确实有这个需要我就去把这个东西的代码拷贝下来。
+
+过程：
+1. 后端 依旧是 Servlet的代码，好像和ajax毫无关系；
+1. 前端使用js代码，核心是一个 XMLHttpRequest对象
+1. 编写对应的逻辑，核心好像是一个 **监听器的机制**
+
+这里写的很简单，因为我的时间比较紧，如果有需要我再回来看
+
+# JSON
+这是一个比较重要的内容，所以我的话直接把它看完好了。。。
+
+草，直接用上框架了
+
+
