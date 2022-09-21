@@ -136,7 +136,7 @@ DI需要在bean里面去手动配置，不方便，所以 提供了一个**自�
 第三方的包的实例使用 容器管理的时候，**推荐使用setter注入**。就酱。
 
 ### Spring加载 Properties的配置
-呃讲了一个 Srping名称空间的问题，虽然我也不知道为什么：到时候直接去看；
+呃讲了一个 Spring 名称空间的问题，虽然我也不知道为什么：到时候直接去看；
 小知识：怎么给 Spring添加新的命名空间：需要的时候可以直接去看视频；
 
 ![Img](./res/drawable/Spring的Properties的加载流程.png)
@@ -203,9 +203,155 @@ Spring 2.5的时候好像是一个半注解的方式，如果有需要直接看�
 1. 模板代码： SqlSessionFactory
 1. 执行业务
 
-### 具体步骤
+### 具体步骤（采用注解开发）
 这是一个具体并且模块化的动作....
 说实话我记得我原本是要做web来着，现在却变成一个劲的学框架了...
+以上是吐槽。
 
+大概步骤：
 1. **整合所需要的**坐标
-1. 
+1. Spring的Bean管理 SQLSessionFactory以及进行对应的 DI，并提供**对应的配置信息**
+1. 核心是 MyBatis的两个配置类： (待补充)
+
+## 整合 JUnit
+因为我之前其实没有怎么学过 JUnit，而我又是投了测试的岗位，所以这里的笔记**会写得稍微详细一点**
+
+导包的话一样的： JUnit本身的，以及 Spring 整合 JUnit的包；
+```xml
+        <!-- JUnit 的坐标 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Spring 整合 JUnit 的坐标 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.2.10.RELEASE</version>
+        </dependency>
+```
+
+然后在**测试包里面添加测试方法**，这个我以前没做过，都是直接用的注解；
+
+配置`@RunWith(SpringJUnit4ClassRunner.class)`注解，表示这是测试类；
+配置 Spring的配置类：`@ContextConfiguration(classes = SpringConfig.class)`
+
+剩下完成自动装配，然后就是我熟悉的部分了...
+
+一句话解释：要使用**Spring专用的类加载器**
+![Img](./res/drawable/Spring整合JUnit的代码.png)
+
+# AOP
+一种**编程思想**。
+面向切面编程 **指导开发者如何组织程序的结构**
+最大的特点（或者说作用）： 不改动原有的代码， 做功能增强
+说实话第一次看的的时候挺震撼...
+
+## AOP的核心概念
+我要把 AOP 的作用贴到这里： **不改动原有的代码， 做功能增强**
+连接点：你AOP不是要增加功能吗？ 在哪些地方你**可以增加**，这些地方就叫连接点；
+切入点：增强了之后，这些**已经被增强的方法**， 就叫切入点；
+通知：需要添加的**新功能**就称之为通知
+切面：一个通知与一个切入点对应之后，管**它们的绑定关系**叫切面
+通知在代码中的本质是一个方法(Kotlin中函数是一等公民, 不知道这个会不会发生变化)，方法需要**依附于一个类**, 这个类叫做 通知类
+
+![Img](./res/drawable/AOP的核心概念的介绍.png)
+![Img](./res/drawable/AOP核心概念总结.png)
+
+# AOP快速入门
+**注意!** 注解算源代码的一部分, 所以如果**配置类的东西 还是用 XML比较好**
+
+大概的步骤是: 导包, 连接点, 通知类和通知定义, 切入点, 定义切面. 完成.
+
+第一步: 导包: context包如果导入的话不再需要 aop, 两者有依赖关系; 只需要导入 ASpectJ的包
+```xml
+    <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+```
+
+我在你已经知道 AOP核心概念的基础上来直接说这个代码的实现: 
+
+第二步: 连接点: 
+**Spring里面一般把 函数(方法)作为连接点**
+
+第三步: 定义通知类:
+好像现在 Spring框架可以直接定义 一个 aspect, 不过暂时不管
+
+通知(公共方法)定义, 上面加上你需要执行时机注解:`@Componet` 和`@Aspect`;
+
+第四步: 定义切入点
+通过注解`@PointCut`定义一个**私有方法**, 里面有各种切入点定义的格式; 
+比如 `@Pointcut("execution(void com.dao.UserDao.update())")`
+
+第五步: 创造切面
+第三步完善, 添加注解(应该是时机),需要把第四步定义的切入点作为注解的值;
+
+并且 Spring的aop需要用 作为 Bean被 Spring 管理才行. 在Spring的配置类里面, 添加`@EnableAspectJAutoProxy` 注解, 表示开启注解配置的 aop
+
+
+以上所有的内容, 整理成代码就是: 
+通知类
+```java
+/**
+ * AOP 通知
+ */
+@Repository
+@Aspect
+public class MyAdvice {
+    // 定义切点: 指定执行哪个方法的时候进行 发送通知(应该是)
+    @Pointcut("execution(void com.dao.UserDao.update())")
+    private void pt(){}
+
+    @Before("pt()")
+    public void method () {
+        System.out.println(System.currentTimeMillis());
+    }
+}
+
+```
+Spring的配置类: 
+```java
+
+```
+
+这里弄出了一个莫名其妙的错误不知道怎么搞的
+
+
+# SSM部分
+首先说结论: SpringMVC是用来替换 Servlet复杂的开发流程的.
+
+![Img](./res/drawable/SpringMVC的Web工作流程.png)
+
+## 快速入门
+坐标: Servlet 和 springwebmvc
+
+```xml
+        <!-- Servlet的坐标, 可能是因为 MVC 的底层就是 Servlet-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- SpringMVC 必备的坐标-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.2.10.RELEASE</version>
+        </dependency>
+```
+
+定义控制器: 
+现在 Servlet 相当于有了一个新名字: Controller
+细节
+
+因为是 Spring技术, 当然需要定义 Spring的配置类;
+
+**现在还没有SpringBoot**, 你的服务器依然是使用 Tomcat 启动的,**要让 Tomcat识别**,
+到这里...
