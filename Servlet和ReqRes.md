@@ -200,8 +200,41 @@ Cookie和Session的区别
 使用 **Ajax好像可以实现初步的前后端分离**
 
 ## 作用
-- 与服务器进行数据交换
+- 与服务器进行数据交换，摈弃jsp的使用
 - 实现**异步交互**：例如搜索引擎的**搜索提示功能**，注册的**用户名的可用校验**
+
+有一个很容易**判断当前**是在做同步还是在异步的操作：如果浏览器页面上的页面在转动，说明在等待服务器的相应，此时就是同步；如果不是一般就是异步请求了。
+
+## 使用
+本质是一段JavaScript的代码，核心是通过 XMLHttpRequest这个对象进行数据中转；
+贴一段实例代码应该就差不多了：
+```javascript
+function loadXMLDoc()
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{
+		//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+		xmlhttp=new XMLHttpRequest();
+	}
+	else
+	{
+		// IE6, IE5 浏览器执行代码
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET","/try/ajax/ajax_info.txt",true);
+	xmlhttp.send();
+}
+```
+
+
 
 ## 快速入门
 可以在 w3cschool等地方复用现成的ajax的代码
