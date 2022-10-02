@@ -597,7 +597,7 @@ RESTful风格是一种 用Http原生请求类型**直接表示对资源的访问
 
 RESTful风格本质就是 前端像后端提交请求的时候直接标明自己是CRUD的哪一种。
 
-## 入门案例
+### 入门案例
 具体要在MVC实现这种风格：
 原本通过 注解 `@RequestMapping`指定URLPattern，现在需要显示在里面指定 请求的 method；名称要规范（但是具体我不管）；参数的提交摈弃原先的 K-V的那种，直接换成Val，隐藏key的细节。
 
@@ -610,7 +610,7 @@ RESTful风格本质就是 前端像后端提交请求的时候直接标明自己
 
 不过主要是json的应用范围更广。
 
-## 快速开发
+### 快速开发
 针对入门案例的简化开发：主要是**注解的简化和重复路径的简化**
 入门案例的繁琐主要体现在：
 - 尽管是对同一个路径编写代码，但是每个方法上都要写相同的路径；
@@ -621,6 +621,7 @@ RESTful风格本质就是 前端像后端提交请求的时候直接标明自己
 此外，上面这两个注解简化成了：`@RestController`，表示两个注解的合体
 针对请求方式，也简化成了 类似 `@PostMapping`这样的注解
 
+### 还是前后端数据传输的问题
 **还是再提醒一下**，和上面的知识无关：传递JSON数据的时候记得形参那里写 `@RequestBody`的注解
 
 一个小知识：**还是关于静态资源访问的问题**：
@@ -649,7 +650,66 @@ public class SpringMVCSupport extends WebMvcConfigurationSupport {
 
 感觉非常麻烦，如果是在 Boot里面的话不知道有没有方法可以简化这个操作。
 
-在黑马的视频里面还讲了 怎么通过vue和axio将前端的数据异步通信到后端对应的 Controller中去，但是我还不懂；
+## 表现层的数据封装
+结论：用来解决我在别人项目里面看不懂 VO文件夹的问题
+VO就是 ValueObject（模型类）, 约定好后端向前端发送数据的时候**统一好数据格式**；
+本质是前后端分离；
+
+统一数据返回的结果类一般定义成 Result; 
+```java
+public class Result {
+    private Object data;
+    private Integer code;
+    private String msg;
+}
+```
+
+这就是一个最基本的**用于向前端返回的模型类**；
+
+约定 code状态码 1代表成功，0代表失败；
+
+总之是**又加了一层封装**，能理解这个应该就没问题。
+
+## 统一异常处理
+Web的服务端出异常的时候前端是没办法处理的；
+所以在后端一般会进行统一的异常处理：
+
+![Img](./res/drawable/Web层常见的异常.png)
+
+那么关于对异常的处理有两个：
+在哪处理，怎么处理；
+
+Java的异常一般是：
+- 通过在 try catch 直接在代码里面进行处理；
+- 通过throw将异常向上传递给函数的调用者去处理（一般俗称为向上抛异常）
+
+异常的类型太多，使用 第一个肯定不行；用第二个，那么就在几乎最顶层的表现层（Controller）里面去处理
+
+怎么处理呢？单独一个异常不可能单独一个方法，因为处理异常的逻辑大多数相同 -> AOP技术；
+
+MVC有**现成的注解直接给你使用**：应该就是AOP技术；
+只需要两步即可：一是给你的通知类加上`@RestControllerAdvice`, 这个rest是指**rest风格**；第二步就是在里面具体处理的函数那里加`@@ExceptionHandler(Exception.class)`
+```java
+@RestControllerAdvice
+public class ProjectExceptionAdvice {
+    @ExceptionHandler(Exception.class)
+    public void catchEx (Exception exception) {
+        System.out.println("我调用了异常的方法");
+    }
+}
+```
+
+异常处理器的命名一般是 `xxxAdvice` 或者`xxxHa`
+
+### 具体的异常处理方案
+其实就两步：
+1. 统一异常的类型，方便进行统一处理；
+1. 包装运行中可能出现的各种异常，并进行对应的处理
+
+处理的话，可以用AOP进行简化开发
+
+具体的细节到时候去看别人的项目去了解吧
+
 
 # 【临时】Vue简单入门
 补充一个 vue的快速入门：
@@ -732,6 +792,18 @@ SpringBoot 旨在简化 Spring应用的开发。
 
 SpringBoot它真的很快。
 首先boot程序可以直接打成jar包直接运行；
+
+贴一个：路径的问题
+默认的boot项目启动都是：
+`http://localhost:8080`
+
+如果你想让你的项目像以前的tomcat一样带一个项目名字的话：
+在 配置文件里面配置一个：
+```yaml
+servlet:
+    context-path: /FromZerotoExpert
+```
+
 
 ## 快速开发的秘诀
 起步依赖： Boot提供最佳的版本实践，直接使用，无需再次指定版本；
