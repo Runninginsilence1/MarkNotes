@@ -39,6 +39,11 @@ NoSQL数据的常见的数据结构有键值对、文档、图等类型。共同
 Redis官方没有Windows版本的安装包。
 因此我们使用Linux系统安装Redis。这里以CentOS7.6为例。
 
+**黑马版和尚硅谷的区别**
+黑马的是安装在usr目录的，而尚硅谷是安装在opt目录的。
+
+关于这两点的区别，请看博客[Linux 软件安装到哪个目录](https://blog.csdn.net/aqxin/article/details/48324377)
+
 1. 安装Redis的前置依赖。
 Redis基于C语言编写，因此需要gcc编译环境。
 使用命令yum install -y gcc tcl。
@@ -52,6 +57,8 @@ make指令是Linux的相关功能，自行查阅。
 
 至此，Redis安装成功。Redis的安装目录也会加入环境变量。
 默认的安装路径为/usr/local/bin 目录下。
+
+我也有一个更好的办法： 尝试使用在线工具去学习redis：[Redis Playground](https://try.redis.io/)
 
 ### Redis的三种启动方式
 #### 1. 前台启动
@@ -315,3 +322,4 @@ API统一，使用方便
 set session sql_mode='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 ```
 ### 短信登录模块
+感觉太啰嗦了

@@ -191,8 +191,18 @@ MyBatis使用**同名的匹配的机制**来实现自动封装；
     </resultMap>
 ```
 
+boot里面注解开发，注解的那个来这里看：[Mybatis之 resultMap的使用（注解方式）](https://blog.csdn.net/although1/article/details/103719383)
+
 还是很麻烦
 为什么不能自动映射？
+**现在他可以了！**
+在yml的配置文件里面修改属性即可：
+```yml
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: on
+```
+
 
 ### 动态条件查询（动态SQL）
 当查询条件变化较大，使得sql语句会在不同的情况下变化的时候，动态sql可以在**框架层面提供较好的支持**
