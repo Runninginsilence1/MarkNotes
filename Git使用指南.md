@@ -230,3 +230,40 @@ Git - Branchs
 # M强制给当前分支重命名
 git branch -M main
 ```
+
+# 设置gitignore
+通过在git仓库下设置gitignore可以设置git在扫描时要忽略哪些文件。
+git扫描时以当前目录为根目录。
+
+**直接忽略根目录的某个文件夹**
+```gitignore
+/target
+```
+
+```gitignore
+
+```
+
+
+**忽略文件夹除了xx文件**
+```gitignore
+**/cache/*
+!**/cache/index.html
+# 感叹号应该就是取反的意思
+```
+
+**忽略以指定后缀文件如：xxx.php  xxx.html**
+```gitignore
+*.html
+*.txt
+*.php
+```
+
+**忽略指定文件夹下的指定后缀文件**
+```gitignore
+sender/vendor/workerman/*.log
+sender/vendor/workerman/*.txt
+```
+
+# Linux环境配置GitHub的相关环境
+wait editing...

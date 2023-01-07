@@ -1,6 +1,53 @@
 # Shell
 随便写写
 
+# test命令 in shell
+test用于检查条件是否成立。（推测应该返回的是if可以判断的布尔值）
+可以进行**数值、字符和文件**三个方面的测试。
+
+**数字测试**
+![Img](./res/drawable/shell的test命令的数值测试.png)
+
+```shell
+num1=100
+num2=100
+if test $[num1] -eq $[num2]
+then
+    echo '两个数相等！'
+else
+    echo '两个数不相等！'
+fi
+```
+
+**字符串测试**
+![Img](./res/drawable/shell的test命令的字符串测试.png)
+
+```shell
+num1="ru1noob"
+num2="runoob"
+if test $num1 = $num2
+then
+    echo '两个字符串相等!'
+else
+    echo '两个字符串不相等!'
+fi
+```
+
+**文件测试**
+![Img](./res/drawable/shell的test命令的文件测试.png)
+
+```shell
+cd /bin
+if test -e ./bash
+then
+    echo '文件已存在!'
+else
+    echo '文件不存在!'
+fi
+```
+
+并且shell还提供了逻辑连接符：
+另外，Shell 还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为： ! 最高， -a 次之， -o 最低。例如：
 ```shell
 #!/bin/bash
 #######################################参数设置##########################################

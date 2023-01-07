@@ -8,7 +8,7 @@
 我实际操作了，完成了一个最基本的搭服：**可以通过IP加端口连接进服务器**，管理员功能生效，但是tickrate插件没有生效；
 大概的步骤是：
 1. 下载 steamcmd需要的环境，还有软件 screen, 为了可以**断开shell连接后服务器依旧开启**
-1. 下载cmd，然后使用匿名登录，**下载游戏的服务器客户端**
+1. 下载cmd，然后使用匿名登录，**下载游戏的服务器客户端**。这样，纯净的原版游戏服务器搭建完成（但是**没有包含插件平台**。）
 1. 服务端好了之后，需要**安装插件平台环境**，这样才能在服务器里面使用插件；
 1. 修改一大堆游戏或者插件需要的配置，这样游戏才能够正常启动，或者说按你想要的方式去启动。
 1. 游戏配置完成之后。。。你需要用一个软件 screen去启动游戏了，这样保证你可以shell离线后**服务器不关闭**
@@ -27,11 +27,37 @@ sudo apt-get update   //更新apt-get，sudo用于临时提升权限，如果你
 apt-get install lib32gcc1  //安装依赖库，c++的
 apt-get install screen   //安装screen
 ```
-对于centos的，换成 yum，然后c++用这一句：yum install glibc.i686
+对于centos的，换成 yum，然后c++用这一句：`yum install glibc.i686`
+还有一个命令：`yum install libstdc++.so.6`
+
 具体看博客
 [/lib/ld-linux.so.2: bad ELF interpreter解决](https://blog.csdn.net/l1028386804/article/details/77645925)
 
-wait updating...
+### 安装steamcmd的客户端
+首先在你的用户根目录创建一个steam的文件夹：
+`mkdir ~/Steam	//创建Steam文件夹`
+
+在该目录下，下载linux版本的 steamcmd：
+`wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz`
+
+下载完毕后解压压缩包
+`tar -zxvf steamcmd_linux.tar.gz		//解压`
+
+通过官方提供的sh来安装客户端：
+`./steamcmd.sh`
+
+等待安装完成，进入cmd的客户端:`Steam>`
+执行匿名登录：`login anonymous`
+
+然后下载求生之路2的服务端：`app_update 222860 validate`
+
+下载完毕后即可退出 cmd： quit;
+
+此时就已经可以通过命令启动服务器来测试一下试试了其实；
+
+
+### 此时游戏
+
 
 ## 一些问题的解决
 ### 端口问题
@@ -52,8 +78,36 @@ iptables -D INPUT -m state --state NEW -m udp -p udp --dport 端口 -j ACCEPT
 连接游戏需要公网ip加端口连接
 试试shell里面输入：`curl https://httpbin.org/ip`
 
+### 多用户问题
+和服务器有关的部分通常需要用户具有一部分超级用户权限，不过你不会想用root用户登录，可以尝试一下方式：
+```shell
+adduser steam
+adduser steam sudo
+login
+```
+
 # 选择想玩的插件，进阶就是自己编写插件了
 写插件要有cpp的语法基础
 
 玩转linux需要有一定的shell基础
 
+# 服务器更新问题（情况很少见）
+虽然情况很少见但是今天真就让我碰到了（铸币吧）
+情况就是： 客户端更新，而服务器没有更新，两端的**游戏版本就不匹配**，服务器就相当于失效了。
+服务器开服会显示：非最新版本，要求重启服务器来更新，但是其实**不用重启Linux服务器也可以的**
+
+可以看这个博客：
+[求生之路2服务器更新方法](https://www.bilibili.com/read/cv13455610)
+
+其实打开Steam的cmd客户端，更新Server端就可以了。
+
+`...your_Steam_cmd_path/steamcmd.sh` 启动Steam的cmd客户端；
+
+2.设置安装目录(应该为left4dead2.exe所在目录
+`force_install_dir ./left4dead2_ds/ //此处意为安装在一个名叫left4dead2_ds的在当前目录下的目录`
+
+匿名登录 Steamcmd
+`login anonymous//匿名登录，省事儿`
+
+最后开始更新即可：
+`app_update 222860 validate //更新求生之路2win服务器`

@@ -162,6 +162,25 @@ Rust：`[i32; 5]`
 数组用的不多，Vector用的更多，类似其他语言的集合。
 如果如果不确定用哪个，那么就用Vector。
 
+## 数组和数组的切片
+和其他语言一样， rust的默认数组性能优秀（存储在栈上），但是功能较差（长度固定，不能动态增加）
+
+rust的数组类型的声明是这样的： Rust：`[i32; 5]`
+切片则为： `&[T]`， t为具体的元素的数据类型；
+和go语言一样， 切片在大多数时候要更加有用：
+```rust
+#![allow(unused)]
+fn main() {
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+let slice: &[i32] = &a[1..3];
+
+assert_eq!(slice, &[2, 3]);
+}
+
+```
+
+
 ## 函数
 这里注意区分一个在Rust中很重要的概念：
 语句（Statement）和表达式（Expression）：语句是一个指令，而表达式是计算值
@@ -334,6 +353,20 @@ let user2 = User{
 
 ## Tuple Struct
 元组结构体，适用于想直接使用元组，但是又想把它区别于 Rust默认的元组的话，可以使用它
+**元组结构体就是一个有名字的元组**
+
+学习智能指针时补充：
+定义一个自定义的 Box 就可以使用 tuple Struct：
+```rust
+struct MyBox<T>(T);
+
+impl<T> MyBox<T> {
+   fn new(x: T) -> MyBox<T> {
+    MyBox(x)
+   } 
+}
+```
+
 
 ## Unit-Like Struct 空结构体
 适用于想实现Trait而又不需要有字段的情况下。
@@ -369,6 +402,15 @@ match需要穷举所有的可能性，下划线表示不关心对应的结果。
 enum中的类型可以额外绑定数值，也可以用于模式匹配。
 
 if let相当于只关注单一匹配结果的match，**可以理解成**match的语法糖。
+写法：
+```rust
+fn gen_err() -> Result<(), Box<dyn Error>> {
+    
+}
+
+if let Err(e) = 
+```
+
 
 # Rust的模块管理工具
 ![Img](./res/drawable/Rust的代码组织.png)
@@ -651,8 +693,23 @@ Rust语言中使用泛型的性能：（C++使用泛型在运行时也不损失�
 
 单态化：编译时为泛型的每一种类型都生成代码。
 
+
+turbofish语法：
+可以参考这篇博客：[Link](https://www.jianshu.com/p/9107685ece03)
+
+简单的说，在编译器不能推断泛型参数的时候，有**两种显式的指定泛型参数的方式**
+1. 直接给变量指定类型；
+1. 通过turbofish语法指定：
+
+```rust
+let v = Vec::<bool>::new();
+println!("{:?}", v);
+```
+
+其他的以后再说。
 # Trait
 ```rust
+// 定义 trait
 pub trait Summary {
     fn summarize (&self) -> String;
 }
@@ -667,6 +724,8 @@ pub trait Summary {
 
 pub struct Bilibili {}
 
+// 我自己觉得rust语法的可读性其实还可以
+// 实现 特征 Summary 用 Bilibili
 impl Summary for Bilibili{
     fn summ(&self) -> String {
         String::from("Bilibili")
@@ -865,3 +924,620 @@ Rust进行测试的时候，默认是进行多线程并行进行（依赖于现�
 1. 运行一个特定的测试： cargo test 函数名
 1. 运行某个测试文件里面所有的测试： cargo test --test 文件名
 
+## 针对binary crate进行测试
+![Img](./res/drawable/Rust针对binary进行测试.png)
+
+个人理解：逻辑就是要放在lib里面的，main里面主要就是胶水。
+
+# 实战项目：Rust编写命令行程序
+需求：编写一个类似Linux的grep的程序：第一个参数是需要匹配的内容；第二个参数是读取的文件。
+
+对应的知识点：
+1. 如何接受命令行参数
+1. 怎么读取文件
+1. 重构：改进模块和错误处理
+1. 使用TDD（测试驱动开发）开发库功能
+1. 使用环境变量
+1. 将错误信息写到标准错误而不是标准输出
+
+## 接受命令行参数
+Rust的标准库提供一个函数可以读取程序的启动参数：`std::env::args;`
+这就是第一个需求的核心实现：它会返回一个迭代器，里面包含的就是启动参数的内容；通过collect方法可以拿到一个集合（Vec）
+里面的元素就是启动参数了。
+单元测试为打印一遍即可。
+
+```rust
+use std::env;
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let first_arg = &args[0];
+    println!("{}", first_arg);
+    
+    // borrow two args for query and locate;
+    let query = &args[1];
+    let filename = &args[2];
+
+    println!("query value is ## {} ##, file name is ## {} ##", query, filename);
+}
+```
+
+## 读取文件
+读取文件内容：
+通过标准库中的一个函数可以读取文件中的文本内容并返回一个`Result<String>`
+包含上一节内容的代码：
+```rust
+use std::env;
+use std::fs;
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let first_arg = &args[0];
+    println!("{}", first_arg);
+    println!("################");
+    println!("################");
+    
+    // borrow two args for query and locate;
+    let query = &args[1];
+    let filename = &args[2];
+
+    println!("query value is ## {} ##, file name is ## {} ##", query, filename);
+
+    // expect is sugar of unwrap: 
+    // OK -> Vaule;
+    // Err -> print msg && panic!;
+    let content = fs::read_to_string(filename)
+    .expect("Something went wrong when read file...");
+    println!("With text:\n{}", content);
+}
+```
+
+## 重构的最佳实践：对前面的代码进行重构
+
+**软件开发的原则是： 尽可能早的开始代码的重构**
+
+重构的目的是：
+1. （我认为的）解耦
+1. 增加代码的模块化程度，每个fn只负责一个功能；
+1. 错误处理
+
+现在的代码存在的问题：
+1. main函数里面涵盖了所有的业务代码，混乱；
+1. 在逻辑上有关系的变量在代码层面没有实际的联系；
+1. 功能不同的变量混合在一个代码里面了；
+1. 错误处理的方式过于单一（仅仅是打印），程序不够健壮
+
+### 二进制文件分离要点
+![Img](./res/drawable/Rust二进制程序分离的指导性原则.png)
+
+所以所有的业务逻辑代码应该在lib中，而对应的二进制程序的代码量应该尽可能的少，以致于只需要通过直接阅读代码就可以确认代码的正确性。
+
+```rust
+use std::env;
+use std::fs;
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let first_arg = &args[0];
+    println!("{}", first_arg);
+    println!("################");
+    println!("################");
+    
+    // borrow two args for query and locate;
+    // Old code:
+    // let query = &args[1];
+    // let filename = &args[2];
+
+    // New code:
+    let config = Config::new(&args);
+
+
+    println!("query value is ## {} ##, file name is ## {} ##", config.regex, config.filename);
+
+    // expect is sugar of unwrap: 
+    // OK -> Vaule;
+    // Err -> print msg && panic!;
+    let content = fs::read_to_string(config.filename)
+    .expect("Something went wrong when read file...");
+
+    println!("With text:\n{}", content);
+
+}
+
+// struct Config is uesd to retain regex and filename
+struct Config {
+    regex: String,
+    filename: String,
+}
+
+impl Config {
+
+// Service: Parse args when run main application
+// params: &[String] including all the args split by <Space>, although we just need regex and filename
+// return: (&str, &str) The 1st is regex, 2nd is filename
+fn new(args: &[String]) -> Config {
+    // let query = &args[1];
+    Config{regex: args[1].clone(), filename: args[2].clone()}
+
+}
+}
+```
+
+错误处理的最佳实践暂时不写。
+
+### 使用TDD（测试驱动开发）的方式进行库开发
+TDD是一种众多软件开发方法中的一种。
+它是通过**测试驱动的**。（据说）这种开发方式可以提高代码编写的激励性，也可以提高测试的覆盖率。
+通用的TDD的开发方式是这样：
+![Img](./res/drawable/测试驱动开发TDD基本法.png)
+
+我对着视频的那个方式那么写过代码，不过我不确定到底要怎么把对应的笔记记到这里会比较好...
+
+### 使用环境变量
+结论： 两个：
+1. 怎么使用环境变量的值；
+1. 怎么在程序运行的时候指定环境变量；
+
+第一个：
+```rust
+use std::env;
+
+fn main () {
+    let is_sensitive = env::var("lasdjl").is_err();
+}
+```
+
+第二个有需要的话看视频或者搜索吧。
+
+### 区分标准输出和标准错误输出
+大多数的终端的标准输出有两种：stdout and stderr；
+我们一般希望标准输出的信息和错误信息可以**区分开**来：
+宏`println!`会输出到标准输出；
+宏`eprintln!`会输出到标准错误输出；
+
+# Rust的函数式语言特性：闭包和迭代器
+## 闭包
+![Img](./res/drawable/Rust闭包的定义.png)
+应该和我在学习其他语言时候的闭包定义相同（例如Go语言）；
+
+## 闭包的类型推断
+语法：`|param_1: type, param_2: type| -> res {function...}`
+
+因为Rust有上下文推断的机制，所以**参数类型和返回值可以省略**
+
+```rust
+fn main(){
+    // 因为rust的上下文推断，你可以省略num的参数类型和对应的返回值
+    let expensive_clousure = |num| {
+        thread::sleep(Duration::from_secs(2));
+        num + 1
+    }
+
+    let res = expensive_clousure(2);
+}
+```
+
+因为闭包通常只在狭小的上下文中使用，而函数**作为对外暴露的API**，是需要有唯一，无歧义的定义的。
+
+## 结合泛型和fn trait，通过结构体来存储闭包
+
+struct可以持有闭包以及对应的返回值。这适用于：
+1. 需要结果时才会去执行的函数；
+1. 结果可以缓存
+
+这种方式在性能优化中很常见，一般叫做延迟加载(相比下IDEA为全加载，所有结果都是已经缓存好的，**各有优势**)
+
+需要注意：因为struct里面要明确每个字段的类型，所以闭包要**指明匿名类型**
+并且在struct中的每个闭包**实例唯一**，即使它们的签名一致。
+
+所以通过泛型和 trait bound来让struct持有闭包。
+
+所有的闭包至少都要实现以下一种trait：
+- Fn
+- FnMut
+- FnOnce
+
+下面以Fn举例：
+
+```rust
+struct Cacher<F> 
+// 在这里对闭包的类型进行约束：参数是u32，返回值是u32
+    where F:Fn(u32) -> u32 {
+        calculation: F,
+        value: Option<u32>,
+    }
+// 个人感觉这里有点像go的匿名函数的定义：例如接受一个函数类型的参数： func(string) bool 这样的；
+```
+
+杨旭介绍的这里的struct的用法是： 如果value为None，那么就执行闭包；如果不是，就返回这个value
+```rust
+        fn value(&mut self, arg: u32) -> u32 {
+            match self.value {
+                Some(v) => v,
+                None => {
+                    let v = (self.calculation)(arg);
+                    self.value = Some(v);
+                    v
+                }
+            }
+        }
+```
+
+我确实不太习惯这种复杂的写法；
+而且作为闭包的入门案例来做是不是不太行？
+一个简单的功能，但是代码非常复杂；
+不过rust确实严谨，这没什么问题。
+
+## 闭包捕获环境
+闭包和函数最大的区别是：闭包可以捕获其定义内作用域的参数（不过会产生额外的内存开销）
+捕获参数的形式，与函数获得参数的方式一样，并且通过trait来约束获取参数的方式：
+
+- Fn 不可变借用；
+- FnMut 可变借用
+- FnOnce 所有权转移
+
+这种方式可以避免因为使用闭包而导致的内存泄漏的问题；
+
+struct clousure的**最佳实践**：
+先使用Fn，然后如果需要另外两种trait的时候，编译器会告诉你；
+
+# 迭代器相关
+首先是了解迭代器模式：
+迭代器模式： 通过一个迭代器对一系列的项实施任务。
+
+（个人理解：迭代器算是循环的一种封装，或者就说是循环的一种）
+
+在Rust中，采用惰性迭代器原则（Lazy），**单纯**一个迭代器是**没有任何效果的**。对于这一点，产生了**迭代器需要消费的说法。**
+
+请看实例代码：
+```rust
+    let v1 = vec![1, 2, 3, 4];
+    let v1_iter = v1.iter();
+
+// 这里发生借用，没有发生所有权的转移；v1也可以进行遍历，但是会发生所有权的管理，之后v1将会失效；
+    for elem in v1_iter { 
+        println!("got: {:?}", elem);
+    }
+```
+
+## Iterator trait
+用于定义 迭代器行为的trait。
+它的结构：
+关联类型（在Impl中定义，补充的一个，应该是说在使用iterator的时候定义）
+next方法（参数为`&mut self`），用于**返回**迭代器的关联类型。
+
+next方法感觉和我在jdbc里面学习到的哪个东西有很强的关联性，，，不知道是哪个东西。。。
+
+实现这个trait只需要实现next方法就行；每次用于返回一项用Some包裹的结果，遍历完成时结果为None。
+
+## 获得迭代器的方法
+和前面闭包那里有点类似：也分为取得所有权、不可变引用、可变引用：
+- iter方法：在不可变引用上创建迭代器
+- into_iter方法：创建的迭代器会获得所有权，原来的变量会失效；
+- iter_mut方法：迭代的可变引用
+
+## 消耗迭代器
+（个人）可以将迭代器理解成一种资源：
+Iterator trait有一些默认已经实现的方法（位于标准库中），他们中的一些会调用next()方法。一个典型的就是迭代器的sum方法：它会计算总和。
+而next会消耗迭代器中的资源，因此 next()方法也被叫做 “消耗型适配器”： 因为调用它们会把适配器消耗殆尽。
+
+
+这里的弹幕里又一次提到了turbofish语法，不过现在**暂时先不用考虑**，我觉得。
+
+## 产生新的迭代器
+通过 Iterator trait的一些默认实现，可以将 迭代器转换为其他的迭代器：
+请看下图：
+![Img](./res/drawable/Rust产生其他迭代器的方法.png)
+
+## 通过闭包捕获来产生迭代器
+Iterator trait拥有一个filter方法，接受一个闭包作为参数，它的作用是：
+这个闭包在遍历原迭代器的每个元素的时候返回一个bool值，true则添加到新的迭代器中。
+即所谓的过滤；es6表示这个我很熟；
+
+## 通过实现 Iterator trait来 实现一个自定义的迭代器
+首先里面有使用到一个type关键字，似乎同go里面可以定义新的类型（我觉得也可以用泛型实现，不过方向略微有些不同）
+
+核心是实现next方法；
+
+这里视频里面杨老师举了两个例子，具体可以去看视频；
+这里标记一些需要记录下来，常用的方法：
+（诸如vec之类的集合）例如zip方法：可以把两个集合的元素组合起来，就像拉链一样；
+
+map：Iterator trait默认实现的方法，属于**适配器**的一种，可以通过一个闭包把一个迭代器**映射（map）成**另外一个迭代器。
+filter：正是前面提到的，是过滤器。
+sum： Iterator trait 默认提供的方法，底层通过调用next()方法来求和。
+
+而且，使用迭代器往往比你通过维护循环和临时变量来实现遍历的方式，在**安全性上和性能上都要显得更高。**
+**迭代器是一个非常好的封装，推荐你使用它代替某些循环。**
+
+# Cargo与crates.io
+Cargo的详细用法以及发布自己的库函数了。以后再说。
+
+# 智能指针
+首先有一个重要的概念： 可以理解**引用是指针一种。最常见的一种。**
+
+这里回顾一下指针的作用：
+- 在一个变量前面添加&符号可以获得其**引用**；
+- 实现了解引用trait的类型，Rust会自动**尝试去解引用**。
+- 引用除了栈上的一个指针的开销之外**没有其他多余的开销**。
+
+智能指针可以理解成**指针plus**，带有额外的元数据和功能。
+
+## 有必要了解的前置知识：Rust中的堆栈
+> 栈内存**从高位地址向下增长**，且栈内存是**连续分配**的。
+> 并且一般来说OS对**栈内存的大小有限制**，从开发人员以及编程语言的角度来理解：**堆可以认为是无限的，但是栈绝对是有限的。**
+
+（至少对于Rust来说）main线程的栈大小是8mb，而普通线程的大小则是2mb；
+> 在函数调用时会在其中创建一个临时栈空间，调用结束后 Rust 会让这个栈空间里的对象自动进入 Drop 流程，最后栈顶指针自动移动到上一个调用栈顶，无需程序员手动干预，因而栈内存申请和释放是非常高效的。
+
+> 与栈相反，堆上内存则是**从低位地址向上增长**，堆内存通常只受物理内存限制，而且通常是不连续的，因此从性能的角度看，栈往往比堆更高。
+
+而 Rust拥有所有权的特性，所以平常的赋值发生的是所有权的转移（底层是**在栈上的，引用或者智能指针的拷贝，而不处理堆上的数据**）
+
+**关于堆栈的性能**
+首先排除误区： 栈的性能不一定就比堆的好，不然还要堆干嘛
+
+分为分配和读取： 
+- 小型数据，在栈上的分配性能和读取性能都要比堆上高
+- 中型数据，栈上分配性能高，但是读取性能和堆上并无区别，因为无法利用寄存器或 CPU 高速缓存，最终还是要经过一次内存寻址
+- 大型数据，只建议在堆上分配和使用
+
+**总之，栈的分配速度肯定比堆上快，但是读取速度往往取决于你的数据能不能放入寄存器或 CPU 高速缓存。 因此不要仅仅因为堆上性能不如栈这个印象，就总是优先选择栈，导致代码更复杂的实现。**
+
+
+## 引用计数的指针的类型
+原理： 通过记录所有者的数量，使得一份数据被多个所有者共同持有。
+
+![Img](./res/drawable/Rust中智能指针的例子.png)
+
+实现一个智能指针通常是：
+- 用struct实现
+- 实现Deref trait 和 Drop trait,分别可以让这个struct像普通的引用一样使用，以及在离开作用域的时候（它拥有所有权机制）自定义drop函数的逻辑；
+
+## Box
+一种**最简单和最常用**智能指针。
+可以用于指向堆上的数据，除了指针本身，没有其他的性能开销。
+不过**也没有其他的功能**。
+
+它的常见的场景：
+![Img](./res/drawable/Rust的Box的常用的使用场景.png)
+
+Rust圣经补充： 
+- 特意的将数据分配在堆上
+- 数据较大时，又不想在转移所有权时进行数据拷贝
+- 类型的大小在编译期无法确定，但是我们又需要固定大小的类型时
+- 特征对象，用于说明对象实现了一个特征，而不是某个特定的类型
+
+举例：
+**防止数据的直接拷贝**
+因为栈上分配与读取的效率较高，所以Rust默认的赋值操作是clone。
+Rust中的**数组是分配在栈上**的，因此即使当这个数组clone的代价比较大，rust默认也是会直接clone一份的，此时就是Box的一个好场景。
+
+**递归类型（俗称的链表）**
+在遇到类似链表的使用场景的时候， Rust仿照 Lisp（一种函数式的编程语言）的一种集合数据结构 Cons List
+
+这里先提及一下**Rust是怎么确定枚举类型的大小的：**
+枚举（enum）类型，在任意的时候只会存在一个类型（例如Option枚举只会存在 Some或者None）；
+因此rust在确认枚举类型的大小的时候，会为枚举类型分配**变体中最大的类型的大小**； 
+这一部分涉及到结构对齐的知识， 可以去看**go的内存对齐**
+弹幕里面提到有点类似 C语言的 Union
+
+所以如果用 Box包含 List的话，就可以通过编译；
+```rust
+#![allow(unused)]
+fn main() {
+enum List {
+    Cons(i32, Box<List>),
+    Nil,
+}
+}
+
+```
+
+**实现特征对象数组**
+在Rust中要实现数组中存储不同的类型，只有两种： 枚举和特征对象；
+其中前者的限制偏多，常用的是后者；
+
+```rust
+trait Draw {
+    fn draw(&self);
+}
+
+struct Button {
+    id: u32,
+}
+impl Draw for Button {
+    fn draw(&self) {
+        println!("这是屏幕上第{}号按钮", self.id)
+    }
+}
+
+struct Select {
+    id: u32,
+}
+
+impl Draw for Select {
+    fn draw(&self) {
+        println!("这个选择框贼难用{}", self.id)
+    }
+}
+
+fn main() {
+    let elems: Vec<Box<dyn Draw>> = vec![Box::new(Button { id: 1 }), Box::new(Select { id: 2 })];
+
+    for e in elems {
+        e.draw()
+    }
+}
+
+```
+
+**Box::leak**
+算box的高阶部分：
+消费Box的内容，并强制清除Box所代表的的内存；
+
+这里有需要再去看rust圣经的内容。
+
+
+
+
+## Deref trait
+Deref trait是标准库的一个trait，用于定义**解引用时的规则**。
+实现 Deref trait之后，可以实现自定义指针。
+
+要实现它，只需要实现deref这个方法，它的参数是**自身的一个借用**，返回指向内部数据的指针；
+
+```rust
+struct MyBox<T>(T);
+
+impl<T> MyBox<T> {
+   fn new(x: T) -> MyBox<T> {
+    MyBox(x)
+   } 
+}
+
+impl<T> Deref for MyBox<T> {
+    type Target = T;
+
+    fn deref(&self) -> &T {
+        &self.0
+    }
+}
+```
+
+## 函数与方法中的隐式解引用转换
+我个人的理解是，rust帮助开发者对普通和对应的指针参数进行了自动的转换，通过 deref方法。
+
+实现了 deref trait，在传参时， rust会自动分析 deref返回的类型是否可以转换为函数所需要的类型；
+
+最经典的就是&str and String, 因为 String实现了 deref trait。
+整个过程在编译时完成，因此运行时不会产生额外的性能开销；
+
+以上的为 deref trait（不可变），针对可变的，还有另外一种 derefMut trait
+针对的是可变类型，其他部分与 前者基本一致。
+
+并且，这种自动转换有规则，总结就是：
+实现了对应的deref方法的：
+`T: Deref<U>`
+不可变 -> 不可变；
+可变 -> 可变；
+不可变 -> 可变；
+
+# Drop trait相关
+Drop trait就是rust的核心的所有权的一部分底层了：**在超出作用域的时候，每个变量会自动释放对应的内存空间，并且不用担心对应的二次释放的问题。**
+一个自定义的智能指针通常需要实现 deref trait以及drop trait。
+
+实现Drop trait的话实现drop方法即可。注意：Rust不允许直接调用drop方法。 可以通过标准库的替代方案来手动释放：`std::mem::Drop`
+# Rc：引用计数智能指针
+多重所有权机制：通过引用计数的方式而实现。
+用于引用计数的指针（也是Python等语言垃圾回收机制的原理）。
+
+Rc全称 reference counting(引用计数)
+
+## 使用场景
+需要在**堆上分配内存，并且有多个引用都需要同时读取的时候**，使用Rc。
+
+因为多线程会有并发问题，所以**默认的Rc不适用于多线程**。后面会有解决方案的。
+![Img](./res/drawable/Rust的Rc使用的例子.png)
+
+Rc有几个常用的函数：
+```rust
+use std::rc::RC;
+
+Rc::strong_count(); // 计算Rc的强引用计数，new和Rc::clone都会增加计数；
+
+```
+
+Rc现在可能我没有使用场景，到时候有需要的时候再考虑**最佳实践**
+wait update
+
+# RefCell和内部可变性
+RefCell是针对Rust的借用规则做出的一种**在编译时的妥协**；
+Box要求代码在**编译时**就保证安全性，并且不产生运行时开销；
+而RefCell则为在运行时检查，不符合则触发panic。
+
+![Img](./res/drawable/Rust的借用规则在不同时期的检查的比较.png)
+
+![Img](./res/drawable/Rust三种智能指针的区别.png)
+
+RefCell不到最佳的实践场景通常是用不到的，这样Rust不能保证它的安全。
+
+比如使用RefCell的一些场景：
+要**可变的借用**一个本身不可变的值；
+一般来说需要用RefCell包装一下
+
+这里有个代码的实例，不过可惜我暂时看不懂，也没需求，所以暂时先停在这里。
+
+
+![Img](./res/drawable/Rust的RefCell的在运行时记录借用信息.png)
+
+太难了这一部分，根本就没心思听...
+
+## 循环引用导致的内存泄漏
+尽管Rust向来以安全著称，但是Rust仍然有可能产生内存泄漏：
+
+
+# Rust 并发
+首先回忆下进程和线程的概念~ 我已经在很多语言里面接触过了，所以这里就不说和并发有关的东西了。
+
+
+
+通过标准库thread::spawn函数可以直接创建一个新的线程。
+和Go语言不同的是， rust没有采用类似协程（绿色线程的概念，不过可以通过第三方的库实现），rust为了较小的运行时，以及与c交互，所以默认没有提供m:n模型；
+
+在考虑并发的时候需要权衡对应的代价；
+
+## 通过 std::thread::spawn函数创建一个线程
+接收一个闭包作为参数，就是另外一个线程中执行的代码； 返回值是一个joinHandle, 他持有值的**所有权**；
+和其他主流的编程语言一样，需要手动提供join的逻辑（即默认主线程结束的话那么其他分支线程会立刻结束。）
+具体是：
+调用这个join方法会立即阻塞当前的thread，知道对应的线程结束为止；
+
+## 使用move关键字来使用其他线程的数据
+默认的， 如果要**使用其他线程的数据**，通常是对这个数据产生借用。
+
+如果想要在某个线程里面获取所有权， 可以在闭包的前面加上**move**的关键字。
+
+## 通过消息传递来控制并发
+类似于go语言， 线程（或者Actor之间）通过**彼此发送消息来进行消息通信**
+Rust标准库提供channel。
+
+一个 channel就相当于一个管道，包含一个发送端和一个接收端
+通过**调用发送端的方法**，可以像接收端发送数据；
+如果 有任意一端被关闭， 那么可以说**管道被关闭了**
+
+通过标准库的mpsc::channel函数来创建Channel。
+
+mpsc表示 多生产者和单消费者。  返回一个元组， 里面的元素分别是发送端和接收端。 
+
+发送端可以通过send方法发送数据；
+接收端可以通过recv方法接收数据； 这会阻塞当前的线程； 可以使用try_recv方法进行非阻塞的接受；通常会使用一个循环的方式；
+
+
+**Channel和所有权的转移**
+所有权可以帮助你编写安全的并发代码：
+
+通过管道发送的数据会发生所有权的转移；
+管道拥有 clone方法来可以进行管道的克隆；
+
+
+## 基于共享内存的并发
+实际上rust和go都比较支持通过通信来进行并发（也符合rust的安全理念）
+不过rust也提供了不推荐的共享内存的方式：
+
+共享内存类似于多所有权： 多个线程可以访问同一块内存；
+和其他语言， rust也是用mutex（互斥锁）来防止数据竞争。
+
+
+这里暂时没兴趣学；
+
+# Rust的面向对象的特性
+
+
+
+
+
+
+
+
+
+
+
+进度： rust圣经的，那个什么东西，特征对象，搜这个，在box的位置

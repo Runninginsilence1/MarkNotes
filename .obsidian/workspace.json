@@ -1,0 +1,186 @@
+{
+  "main": {
+    "id": "d6a21fa39fbb51fd",
+    "type": "split",
+    "children": [
+      {
+        "id": "bc6899cd36a15ce2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e831c6b6b7f6605d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Redis 青空の霞光.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "00db7acc2385fbe5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "从零开始一个自己的JavaWeb项目.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "9c2cb32d8b8cfbd9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "记录vim操作.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ad493b59f59fcc01",
+    "type": "split",
+    "children": [
+      {
+        "id": "9a122d8baed1081e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ec7add5b6ad85c26",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "6ccfcd1bb597b9e9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "ea8b6bc63454f7cb",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b190886baf13860f",
+    "type": "split",
+    "children": [
+      {
+        "id": "ad56d2bb4452b7e9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8896998a008e3e9f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "从零开始一个自己的JavaWeb项目.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a716dccb98ba3c7a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "从零开始一个自己的JavaWeb项目.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "1ca66642c3b81255",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "7226dfb1eeec96c1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "从零开始一个自己的JavaWeb项目.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "00db7acc2385fbe5",
+  "lastOpenFiles": [
+    "Android Root.md",
+    "Redis 青空の霞光.md",
+    "求生之路2ast插件-readme.mc.md",
+    "res/drawable/安卓逆向的关键点.png",
+    "记录vim操作.md",
+    "求生之路2Linux开服.md",
+    "安卓逆向.md",
+    "Docker尚硅谷版本.md",
+    "Docker快速入门.md"
+  ]
+}

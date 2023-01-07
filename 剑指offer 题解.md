@@ -1,4 +1,69 @@
 # 剑指offer 题解
+# 二分查找
+二分查找是一种时间复杂度为 O(logn)级别的算法，前提条件是**数组有序**
+我们常规的二分查找，是寻找某个元素 target 的下标（并且该数组没有**重复**的元素）。
+
+并且二分查找的题目还有**四种类型的变体。**我会按照提示，总结对应的**模板**
+
+## 四种常规二分查找的模板
+1. 第一个大于 target元素的下标；
+1. 最后一个大于 target元素的下标；
+1. 寻找最后一个小于 target元素的下标；
+1. 返回第一个等于的，如果没有，就返回最后一个小于的；
+
+
+第一个： 
+```go
+func upper(nums []int, target int) int {
+	// 首先是左右边界的初始化（注意是闭区间），一般是下面的代码，
+	// todo: 要记得考虑特殊情况噢
+	l, r := 0, len(nums)-1
+	// Special condition: target greater than right index(On upper function);
+	if target > nums[r] {
+		return -1
+	}
+	// In rust, you should use "while" to loop a condition loop.
+
+	// l < r 可以保证你圈定的范围里面至少有一个element
+	// 同时， l或r的变化单位每次是1的时候，可以保证退出循环是 l == r is true;
+	for l < r {
+		// 计算中位，下面的这个计算方式在少数情况下可以防止溢出，推荐这么写，防止有傻逼给你留坑;
+		// 硬要写成 (l + r) / 2 也不是不行
+		mid := (r-l)/2 + l
+		if target < nums[mid] { // Now range is [l, mid]
+			r = mid
+
+		} else if target == nums[mid] { // 这里的情况看你二分查找的需求： 比如你这里就是要第一个， 那么已经确认的这个很有可能就是第一个，所以你不能让他溜出你的范围，所以：
+			//l = mid
+			l = mid + 1
+		} else {
+			l = mid + 1
+		}
+
+	}
+
+	// 判断一下此时 l and r 的状态：
+	// 这里就是 l == r，然后又处于第一个的需求，所以优先输出l的位置
+	return -1
+}
+
+```
+
+另外有一个有意思的： rust自带一个 binary_search的方法，可以完美解决本题：
+```rust
+impl Solution {
+    pub fn search_insert(nums: Vec<i32>, target: i32) -> i32 {
+        nums.binary_search(&target).unwrap_or_else(|x| x) as i32
+    }
+}
+
+作者：jedske
+链接：https://leetcode.cn/problems/search-insert-position/solution/rust_jedsek-by-jedske-v5ww/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
 # 树的子结构
 提到了一个, 一般二叉树的题目 95%都会使用 递归的方式来解决.
 整个的递归的思路就是: 从根结点开始 判断是不是子节点, 是返回, 不是分别判断左子树和右子树.

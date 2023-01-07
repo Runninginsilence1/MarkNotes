@@ -182,3 +182,92 @@ Vim用于自动补全的快捷键：
 可以将宏理解成命令集合；
 可以通过q加寄存器的方式去录制宏；
 使用@回放录制的宏
+
+zz可以将光标所在行固定在屏幕中央
+zt则在顶层
+
+visual mode下可以通过`U/u`来对应转换大小写
+
+# Vim配置文件
+最重要的是两个：
+1. 知道持久化配置
+1. 知道怎么设置按键的映射
+
+第一个可以在vim里面的命令模式下输入`h option-list`可以显示所有用set控制开启的命令（应该是）
+
+第二个的话，主要是使用map和noremap的使用：
+除了是自己定制vimscript，不然在任何时候都推荐你使用noremap来设置映射。
+
+# 最有用的一章！使用Vim插件！
+vim插件是使用vimscript(vim的一种脚本语言)编写的相关插件。
+它为vim提供极高的扩展性。
+
+想要安装插件的话，
+原始一点的方式：可以通过fork代码的形式来安装
+现代一点的话都是通过插件管理器来进行安装：这里推荐使用vim-plug
+
+# 设置Linux云服务器可以访问github
+题外话：在使用例如腾讯云之类的服务器的时候怎么访问github：
+原理： 修改host来绕过国内傻逼的dns污染：
+## 方法一：
+具体操作请看：
+[知乎](https://zhuanlan.zhihu.com/p/374584044)
+
+## vim-plug插件的安装
+在终端中通过链接 `curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`
+即可（需要确保可以连接到github）
+
+它的使用比较简单：类似Ruby的那种start和end的那种语法，把插件的指令加入到里面，退出的时候就会自动通过网络安装了：
+比如：
+安装第一个插件，通过实例文档，复制一下的代码到你的vimrc里面去：
+```vimscript
+call plug#begin()
+把插件放在这里
+call plug#end()
+```
+
+
+## 寻找插件
+1. ​​​​​​​​​​​​谷歌，最容易想到的
+1. ​​​​​​​​​​​​网址vimawesome
+1. ​​​​​​​​​​​​使用别人的配置，从里面拿有用的东西
+
+## 美化插件
+vim-startify 美化启动页面
+​​​​​​​​​​​vim-airline 美化状态栏
+​​​​​​​​​​​identline 增加代码缩进线条
+
+## 文件管理
+如果不想通过**退出vim然后用vim打开另外一个文件**这种方式来进行多文件的编辑操作的时候，
+通过插件nerdtree插件（它是最流行的文件树管理插件）
+
+通过colorscheme指令可以切换配色方案。
+推荐的配色方案：
+vim-hybird
+solarized
+gruvbox
+
+## 快速定位文本位置： easy-motion
+ezmotion官方提供的文档比较长，其实只有两个常用的操作：
+- 直接跳转的方式；
+- 先搜索过滤， 然后再跳转（视频里面用的命令式递归的ss：“nmap ss ...”）
+
+## 成双成对的编辑：vim-sourround
+在有类似**把一对单引号改成一对双引号**的需求的时候，用vim的默认操作去修改是比较低效的。
+vim-sourround插件可以高效操作。
+
+wait updating...
+
+视频本身很短，以后再考虑用 Plug的指令去安装这个插件，在原生的vim上。
+# 自定义命令
+通过命令command可以自定义命令：
+`command custom_command system_command`
+例如： command tuichu :q
+推荐使用 com!的形式 来绑定；
+
+# linux终端通过ssh进行github验证
+用ssh密钥与github进行通信：
+1. terminal 输入指令`ssh-keygen -t rsa -C “xxxxx@xxxxx.com”` 可以生成ssh公钥和私钥；
+1. 通过cat命令，输出在home目录的 ~/.ssh/id_rsa.pub的内容；
+1. 然后去git服务器添加公钥即可；
+1. 可以用ssh -T git@gitee.com测试；
