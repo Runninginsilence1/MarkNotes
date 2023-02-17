@@ -231,6 +231,11 @@ Git - Branchs
 git branch -M main
 ```
 
+git将暂存区里面的文件移除：
+git restore --staged *
+这个星号可以替换成你想移出暂存区的文件。
+
+
 # 设置gitignore
 通过在git仓库下设置gitignore可以设置git在扫描时要忽略哪些文件。
 git扫描时以当前目录为根目录。
@@ -264,6 +269,8 @@ git扫描时以当前目录为根目录。
 sender/vendor/workerman/*.log
 sender/vendor/workerman/*.txt
 ```
+
+****
 
 # Linux环境配置GitHub的相关环境
 wait editing...

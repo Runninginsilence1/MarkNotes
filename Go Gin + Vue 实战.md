@@ -23,12 +23,53 @@ w和u选项可以对go的环境变量进行对应的**修改和还原**。
 1. 导入实例代码并执行
 1. 浏览器查看效果
 
-gin的基本用法是：
-r.(请求方式)（这里可以说实现了rest风格？）+ 资源路径 + 对应的handler
+# gin的基本用法
+通过Default获取默认路由；
+r.(请求方式)（这里可以说实现了RESTful风格？）+ 资源路径 + 对应的handler
+`r.GET("/ping", func(c *gin.Context) {...}`
 在handler里面如果要返回json的话一般是使用 c.JSON返回状态码和json格式的数据。
 
-与db的连接使用gorm框架，导入的用法和前面一致。
+这个就是一个类似redis测试的ping-pong的工具：
+请看实例代码：
+```go
+package main
 
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	// 这个应该是获取默认的路由，
+	r := gin.Default()
+	fmt.Println()
+
+	// 我已经不记得RESTfulApi是啥东西了，不过我推测是：
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello there",
+		})
+	})
+
+	panic(r.Run())
+}
+
+```
+
+然后下面这个部分应该是：页面传递数据给这个后端接口的时候，应该做的逻辑：看实例代码：
+```go
+// 几个重要的函数
+ctx.PostForm()，应该是拿post的表单数据；
+对应在apipost里面是这个：Body这个标签页下面的内容。
+gin.H本质是一个map[string]any的结构；
+Query用来拿get请求的数据，就这些啊
+
+```
+
+# 用的gorm做的数据库框架
+暂时不看这部分。
+
+与db的连接使用gorm框架，导入的用法和前面一致。
 一个快速入门的案例，我按照我曾经写过一次的那个说：
 gorm里有一个迁移的概念：
 orm框架，基本上（mybatis不是完全的orm框架，拥抱底层的sql语句）是会屏蔽底层的sql的细节的；
@@ -39,10 +80,12 @@ AutoMirage()这个函数是用来初始化数据库中的表的。
 
 总之需要的时候再具体总结去吧。
 
+
+
 # 重构代码的架构
 不能把代码都放在一个文件里面。所以：
 1. table struct 放在model包里面；
-1. 诸如`r.POST`等方法都放在Controller里面
+1. 诸如`r.POST`等方法都放在Controller里面，怎么我看的是用的
 1. 诸如随机字符串的方法放在 util包里面
 1. 一些通用的代码放在common包里面，例如**数据库初始化的代码**
 1. 对于gin框架来说， 路由是一个重要的概念（或者go的标准库里面就有这个概念，甚至web里面就有这个概念，而我不知道。） 不过route暂时只把代码提取到`route.go`里面去，**暂时不用考虑放在包**里面。
@@ -146,7 +189,9 @@ Claims是要在 Payload部分定义的 info，不过你需要对应的把标准�
 ## 环境搭建
 通过 nvm（Node版本管理器）同时安装多个 Nodejs的版本。
 Windows的：[github](https://github.com/coreybutler/nvm-windows)
-居然是go写的，顿时有了不少亲切感
+
+这玩意我一用就有bug，你还是直接用官网的内容去下载吧。
+只安装一个版本的nodejs就可以了。
 
 ### 关于nvm
 nvm这个东西似乎是专门用来管理 nodejs多版本的。
@@ -160,4 +205,32 @@ use 切换node版本
 
 安装vue-cli，通过yarn进行安装全局的vue-cli即可
 需要添加到环境变量才能使用，到处都是坑，草你妈的
+
+# eslint
+这个小玩意有两个作用： 一是发现语法错误；二是规范你的代码；
+我不用来规范我的代码，而且听说这东西有数不尽的麻烦；
+如果想要修改他的配置的话，在你的vue项目的根目录里面的.eslintrc文件里面修改，怎么修改去看视频
+
+# 页面
+是基于bootstrap搭建的页面样式风格。
+首先安装的话，似乎是在一个官网名字叫bootstrap-vue的页面，推测这是b为vue做的一个整合，类似于spring对mybatis的整合；
+可以在官网找到对应的文档： [INDEX](https://bootstrap-vue.org/)
+
+若是用yarn来进行管理的话，使用指令来安装：
+`yarn add vue bootstrap-vue bootstrap`
+
+再往后面看的话需要一部分前端的基础知识了，至少暂时对我来说是没必要了。
+
+这里以后有需要的时候更新。
+
+
+我这里主要是看前后端分离中前端和后端具体交互的过程，看来是这个axios是核心，如果不这样的话，那一般就是后端语言的模板引擎来负责渲染，比如java已经被淘汰的jsp，go的模板引擎，rust使用的tera；
+
+首先安装 axios
+`yarn add axios`
+
+`yarn add vue-axios`
+
+使用 axios一般分为两步：
+首先前端就验证数据，判断是否出现错误；如果没有就再给后端服务器发送请求；
 

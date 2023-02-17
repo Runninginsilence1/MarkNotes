@@ -1,38 +1,133 @@
-# Shell
-随便写写
+# l4d2_dockerfile
+以下是构建l4d2_anne镜像的dockerfile文件。
 
-# 一个实例代码：基于docker搭建的求生之路2的服务器
-[Github的地址](https://github.com/fantasylidong/l4d2-docker/blob/master/entrypoint.sh)
+```dockerfile
+# 基于debian镜像构建，ubuntu就是其中一种
+FROM debian:buster-slim
 
-文件名：entrypoint.sh
-代码：
+# 为包管理器进行配置：添加对应cpu架构的声明，更行apt
+RUN dpkg --add-architecture i386 && apt-get update
+# 安装：
+# curl：经典的命令行工具，用来请求web服务器
+# iputils-ping：经典的ping软件，用来测试主机是否可达；
+# wget：经典的命令行工具，用来从指定url上下载文件；
+# file：不知道什么玩意，不过确实是rpm上面的一个包
+# tar：linux上常用的压缩软件，在软件的安装上用的比较多
+# bzip2：同上，也是压缩软件
+# locales：linux上的多语言环境，非重点
+# gzip, unzip：用于zip算法的解压缩
+# bsdmainutils：重要的工具，不知道别的
+# ...暂时就写这么多，
+RUN apt-get install -y curl iputils-ping wget file tar bzip2 locales gzip unzip bsdmainutils python3 lib32z1 util-linux ca-certificates binutils bc jq tmux netcat lib32gcc1 lib32stdc++6 git nano
+# 我查了一下
+# sed命令的全称是stream Editor，也就是说这一段命令适用于编辑什么东西的。
+# 从这里的locale和utf-8来看，应该是修改区域，总之是做一些初始化的配置
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+# 这里注释掉了，那就不看
+#RUN echo "\n* soft core 0\n* hard core 0" >> /etc/security/limits.conf
+#RUN echo "fs.suid_dumpable=0" >> /etc/sysctl.conf
+
+# ENV用于在dockerfile定义环境变量
+# 似乎和系统默认的export指令有着密切的关系
+# 需要一部分前置知识，学习起来有成本，那就暂时不管
+ENV LANG en_US.UTF-8 
+
+# 添加一个名字叫louis的用户，-m表示一并添加用户目录 /home/louis
+RUN useradd -m louis
+# 字面意思，就是设置工作目录的意思
+WORKDIR /home/louis
+# 选择linux用户为louis
+USER louis
+
+# 安装steam的cmd版
+# 通过wget命令下载资源，然后解压压缩包，板厚移除压缩包，+quit应该是附加退出命令，执行在steamcmd客户端里面的。
+RUN wget http://media.steampowered.com/installer/steamcmd_linux.tar.gz && tar -xzf steamcmd_linux.tar.gz \
+    && rm steamcmd_linux.tar.gz && ./steamcmd.sh +quit
+# 创建文件夹： .steam/sdk32/，-p的意思是没有父目录就一并创建父目录
+# ln命令用于创建链接，这里是创建的符号链接，软连接，相当于快捷方式，前面是连接名字，后面是实际文件的路径
+# 这里应该是不同位数系统的so文件分别创建了符号链接
+RUN mkdir -p .steam/sdk32/ && ln -s ~/linux32/steamclient.so ~/.steam/sdk32/steamclient.so \
+    && mkdir -p .steam/sdk64/ && ln -s ~/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
+# 登录steam客户端，匿名登录（指令中可以用空格，知道下一个加号为止），设置目录，下载，然后退出
+RUN ./steamcmd.sh +login anonymous +force_install_dir ./l4d2 +app_update 222860 +quit
+# 这里粗略的看了一下，--depth选项指定克隆的深度，比如只克隆最近的一次commit，而不是整个项目，相当于只下载最新的版本；
+# -b选项可以在克隆时顺便创建一个有别main的分支（我猜的，没实际测试过），命令为zonemod
+RUN git clone --depth 1 -b zonemod https://github.com/fantasylidong/anne.git
+# 移除anne中的脚本文件夹，这涉及到插件的问题，暂时不管
+RUN rm -rf anne/left4dead2/addons/sourcemod/scripting/
+# 这个是第二个插件吧，看名字似乎是纯净战役
+RUN git clone --depth 1 https://github.com/fantasylidong/purecoop.git
+# neko，不过这里怎么是命名的mysql呢？而且他可以直接从github进行clone，没提到它是怎么弄的代理之类的东西啊...
+RUN git clone --depth 1 -b mysql https://github.com/fantasylidong/neko.git
+# 这里似乎是把完整的插件，整个仓库的内容都弄进来了。
+RUN git clone https://github.com/fantasylidong/CompetitiveWithAnne.git
+# 翻译：100tick刷新率纯净对抗
+RUN git clone --depth 1 https://github.com/fantasylidong/100tickPureVersus.git
+
+# 上面这些仓库以后可以去看看
+EXPOSE 27015/tcp
+EXPOSE 27015/udp
+
+# 设置环境变量
+# 应该就是定义一些常量，然后整个容器内，bash内都通用？
+ENV PORT=2333 \
+    PLAYERS=10 \
+    MAP="c2m1_highway" \
+    REGION=255 \
+    HOSTNAME="leo fighting" \
+    plugin="null" \
+	steamid="STEAM_1:1:121430603" \
+	password="123456" \
+	steamgroup="123456" \
+	stripper="false" \
+	steam64="" \
+	mysql="" \
+	mysqlport="" \
+	mysqluser="" \
+	mysqlpassword="" \
+	dlurl=""
+# ADD命令似乎类似于CP，不过可以自动解压缩，这里应该就是直接把外部的这个文件复制到容器内部去
+ADD entrypoint.sh entrypoint.sh
+# 推测这个就是容器启动后的入口脚本了，也就是所谓的入口？
+ENTRYPOINT ["sh", "entrypoint.sh"]
+```
+
+随后就是这个脚本：
+一起写到里面去，笔记更新到linux教程里面去；
+那同样的，这个我也懒得看了，学习起来有成本，而我也没有
+
 ```sh
 #!/bin/bash
 # Update Game
-# 我个人的理解： 首先是通过Steam官方提供的cmd启动脚本来启动cmd的steam客户端。 然后，在后面添加加号的string，是启动后自动执行的steamcmd的客户端：比如说这里分别是： 匿名登录、设置安装路径（我记得这个应该要放在匿名登录前面的，不然会报错；然后是下载求生的服务器客户端），最后退出
+# 更新游戏
 ./steamcmd.sh +login anonymous +force_install_dir ./l4d2 +app_update 222860 +quit
 
-# 应该steam官方设置的，方便写脚本用的
-
-
 #Softlink l4d2 maps to addons folder
-# 翻译：软链接地图到对应放地图的文件夹。
 #It would more convenience while you want add custom map. Exspecially when you have sourcemod plugins
 #you just need mount your extra map folder to docker container /map . 
-# 翻译：通过docker提供的挂载技术（应该是），可以很方便的添加三方地图，毕竟只要放到文件夹里面就可以了。
-# 
+# 软连接，这样可以用这个map文件夹代替主程序目录内的addons文件夹
+# 这使得你在命令行下操作变得额外方便
 ln  -s  /map/*  l4d2/left4dead2/addons/
 ln  -s  /map2/*  l4d2/left4dead2/addons/
+# 函数 oldpluginpackage
 oldpluginpackage(){
+    # echo命令可以打印string，默认为stdout，然后两个大于号把它重定向到了求生的source插件的，存储管理员steamid的位置，换句话说，这句话是用来添加管理员的。
 	echo "\n\"$steamid\" \"99:z\"" >> /home/louis/l4d2/left4dead2/addons/sourcemod/configs/admins_simple.ini
+    # 从steamgroup可以判断应该是把服务器与对应的steam组绑定起来
 	echo "sv_steamgroup \"$steamgroup\"" >> /home/louis/l4d2/left4dead2/cfg/server.cfg
+    # 什么玩意的密码，哎什么玩意他这是
 	echo "rcon_password \"$password\"" >> /home/louis/l4d2/left4dead2/cfg/server.cfg
 }
+# 函数newpluginpackage，全是文本处理，我在考虑要不要仔细地去看这个命令....
 newpluginpackage(){
 	sed -i "s/13333337/$steamgroup/g"  /home/louis/l4d2/left4dead2/cfg/server.cfg
 	sed -i "s/CompetitiveRework/annehappy/g" /home/louis/l4d2/left4dead2/cfg/server.cfg
 	sed -i "s/WowYouKnowThePasswordHere/$password/g" /home/louis/l4d2/left4dead2/cfg/server.cfg
 }
+
 cloudconfig(){
 	#cloud server settings
 	#插件处理hidden
@@ -290,180 +385,4 @@ fi
 
 # Start Game
 cd l4d2 && ./srcds_run -console -game left4dead2 -ip 0.0.0.0 -tickrate 100 -port "$PORT"  +maxplayers "$PLAYERS" +map "$MAP" -secure
-```
-
-# test命令 in shell
-test用于检查条件是否成立。（推测应该返回的是if可以判断的布尔值）
-可以进行**数值、字符和文件**三个方面的测试。
-
-**数字测试**
-![Img](./res/drawable/shell的test命令的数值测试.png)
-
-```shell
-num1=100
-num2=100
-if test $[num1] -eq $[num2]
-then
-    echo '两个数相等！'
-else
-    echo '两个数不相等！'
-fi
-```
-
-**字符串测试**
-![Img](./res/drawable/shell的test命令的字符串测试.png)
-
-```shell
-num1="ru1noob"
-num2="runoob"
-if test $num1 = $num2
-then
-    echo '两个字符串相等!'
-else
-    echo '两个字符串不相等!'
-fi
-```
-
-**文件测试**
-![Img](./res/drawable/shell的test命令的文件测试.png)
-
-```shell
-cd /bin
-if test -e ./bash
-then
-    echo '文件已存在!'
-else
-    echo '文件不存在!'
-fi
-```
-
-并且shell还提供了逻辑连接符：
-另外，Shell 还提供了与( -a )、或( -o )、非( ! )三个逻辑操作符用于将测试条件连接起来，其优先级为： ! 最高， -a 次之， -o 最低。例如：
-```shell
-#!/bin/bash
-#######################################参数设置##########################################
-NAME="coop"		#screen名称
-DIR=/root/Steam/steamapps/common/"Left 4 Dead 2 Dedicated Server"	 #srcds_run位置
-STEAMCMD=/root/Steam	#steamCMD位置
-PARAMS="-game left4dead2 -condebug -insecure +hostport 27015 +map c2m1_highway +exec server.cfg -tickrate 100 "	#启动参数
-WAY=1		#关闭方式选择。1——screen指令关闭；2——screen获取pid后kill；3——ps获取pid后kill
-
-#######################################详细代码##########################################
-
-#启动部分
-function StartScreen(){
-	StartNameList=`screen -ls | grep ${NAME}`
-	if [[ -z $StartNameList ]];then
-		cd "$DIR"
-		echo -n "[L4D2.sh]开启 ${NAME} 服务器中......"
-		screen -dmS ${NAME} ./srcds_run $PARAMS
-		sleep 1
-		echo "已完成"
-	else
-		echo "已存在名为${NAME}的screen"
-	fi
-	return $?
-}
-
-#screen检查
-function ScreenCheck(){
-	CloseNameList=`screen -ls | grep ${NAME}`
-	if [[ ! -z $CloseNameList ]];then
-		echo -n "检查中..."
-		screen -wipe > /dev/null
-		screen -ls | grep ${NAME} > /dev/null
-		CloseNameList=$?
-		[ $CloseNameList -eq 0 ] && echo "关闭异常" || echo "已关闭"
-	else
-		echo "已关闭"
-	fi
-}
-
-#关闭部分
-function CloseScreen(){
-	CloseNameList=`screen -ls | grep ${NAME}`
-	if [[ ! -z $CloseNameList ]];then
-		echo -n "[L4D2.sh]关闭 ${NAME} 中......"
-		if [ $WAY = 1 ];then
-			screen -X -S ${NAME} quit
-			ScreenCheck
-		elif [ $WAY = 2 ];then
-			screen -ls |grep ${NAME} |awk -F . '{print $1}'|awk '{print $1}' | xargs kill
-			ScreenCheck
-		elif [ $WAY = 3 ];then
-			ps aux | grep -v grep | grep SCREEN | grep srcds_run | grep ${NAME} | awk '{print $2}' | xargs kill
-			ScreenCheck
-		else
-			echo "未指定关闭方式"
-		fi
-	else
-		echo "未找到名为 ${NAME} 的screen"
-	fi
-	return $?
-}
-
-#更新部分
-function Update(){
-	cd $STEAMCMD
-	./steamcmd.sh +login anonymous +app_Update 222860 validate +quit
-	#+force_install_dir ./Steam/steamapps/common/..<Your Path>...
-   #此条注释指令的steamcmd指令，可指定安装位置
-	return $?
-}
-
-#路径检查
-function PathCheck(){
-	if [ -f "$DIR/srcds_run" ];then
-	  echo "[L4D2.sh]srcds_run路径正常"
-	else
-	  echo "[L4D2.sh]srcds_run路径异常"
-	fi
-	if [ -f "$STEAMCMD/steamcmd.sh" ];then
-	  echo "[L4D2.sh]steamCMD路径正常"
-	else
-	  echo "[L4D2.sh]steamCMD路径异常"
-	fi
-	return $?
-}
-
-#交互部分
-function MainBody(){
-	echo "####[ L4D2.sh ]#####"
-	echo "1——开启服务器"
-	echo "2——关闭服务器"
-	echo "3——重启服务器"
-	echo "4——查看服务器"
-	echo "5——更新游戏并重启"
-	echo "6——路径检查"
-	echo "##################"
-	read -n 1 -p "请输入对应数字选择功能:" answer
-	echo
-	case $answer in
-	1 | s)
-		StartScreen;;
-	2 | c)
-		CloseScreen;;
-	3 | r)
-		echo "[L4D2.sh]执行重启步骤"
-		CloseScreen
-		StartScreen;;
-	4 | l)
-		screen -ls
-		echo "以下为详细参数："
-		ps aux | grep -v grep | awk '{print $1,$2,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38}'| grep SCREEN --color
-		;;
-	5 | u)
-		echo "[L4D2.sh]执行更新步骤"
-		CloseScreen
-		Update
-		StartScreen;;
-	6 | p)
-		PathCheck;;
-	*)
-		echo "[L4D2.sh]未知指令，请重试";;
-	esac
-	return $?
-}
-
-MainBody
 ```

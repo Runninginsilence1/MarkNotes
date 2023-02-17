@@ -4,47 +4,34 @@
     "type": "split",
     "children": [
       {
-        "id": "bc6899cd36a15ce2",
+        "id": "3523410cf038843b",
         "type": "tabs",
         "children": [
           {
-            "id": "e831c6b6b7f6605d",
+            "id": "47f3c77a6aba6b55",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Redis 青空の霞光.md",
+                "file": "Python笔记.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "00db7acc2385fbe5",
+            "id": "7948349d16603a2b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "从零开始一个自己的JavaWeb项目.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "9c2cb32d8b8cfbd9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "记录vim操作.md",
+                "file": "技术蛋老师的Vue教程.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -73,7 +60,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "青空",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -110,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "从零开始一个自己的JavaWeb项目.md",
+                "file": "Python笔记.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "从零开始一个自己的JavaWeb项目.md",
+                "file": "Python笔记.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "从零开始一个自己的JavaWeb项目.md"
+                "file": "Python笔记.md"
               }
             }
           }
@@ -171,16 +158,17 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "00db7acc2385fbe5",
+  "active": "47f3c77a6aba6b55",
   "lastOpenFiles": [
-    "Android Root.md",
+    "Python快速入门 By 教材.md",
+    "Docker 青空の霞光.md",
+    "Vue教程.md",
+    "Shell.md",
+    "用Go撸一个Redis出来.md",
     "Redis 青空の霞光.md",
-    "求生之路2ast插件-readme.mc.md",
-    "res/drawable/安卓逆向的关键点.png",
-    "记录vim操作.md",
-    "求生之路2Linux开服.md",
-    "安卓逆向.md",
-    "Docker尚硅谷版本.md",
-    "Docker快速入门.md"
+    "安卓教程.md",
+    "未命名.md",
+    "从零开始一个自己的JavaWeb项目.md",
+    "红黑树.md"
   ]
 }
