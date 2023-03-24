@@ -781,7 +781,7 @@ select `name`, stu.id, grade from stu right join exam on stu.id = exam.id;
     并且当主从表的外键约束形成后，无法直接删除主表上有外键约束的行，必须得先删除从表的对应数据才行。
 
 外键的语法：
-foreign key 从表的字段名 references 主表名(主键名或unique名)
+`foreign key 从表的字段名 references 主表名(主键名或unique名)`
 
 **外键使用细节**
 ![Img](./res/drawable/MySQL外键细节说明.png)

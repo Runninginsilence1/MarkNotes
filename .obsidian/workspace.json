@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Python笔记.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               }
@@ -97,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Python笔记.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Python笔记.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Python笔记.md"
+                "file": "README.md"
               }
             }
           }
@@ -150,9 +150,9 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "canvas:新建白板": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
-      "canvas:Create new canvas": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false
@@ -160,6 +160,7 @@
   },
   "active": "47f3c77a6aba6b55",
   "lastOpenFiles": [
+    "Python笔记.md",
     "Python快速入门 By 教材.md",
     "Docker 青空の霞光.md",
     "Vue教程.md",
@@ -168,7 +169,6 @@
     "Redis 青空の霞光.md",
     "安卓教程.md",
     "未命名.md",
-    "从零开始一个自己的JavaWeb项目.md",
-    "红黑树.md"
+    "从零开始一个自己的JavaWeb项目.md"
   ]
 }

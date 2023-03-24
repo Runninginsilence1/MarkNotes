@@ -27,7 +27,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmo
 ```
 
 接下来需要把docker的库添加到apt资源列表中。所以他待会儿获取docker软件包的方式应该是通过了apt了。
-```shell
+```sh
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 呃，然后更新一次apt 

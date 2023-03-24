@@ -152,11 +152,14 @@ nvim里面通过colorscheme来设置主题，要设置默认主题的话，设�
 有些状态栏不支持主题，所以这里可以安装一个支持的：lualine
 
 安装方式同理，放在那个startup的位置，我之前也应该说了地方；
+
 ```lua
-use {
-  'nvim-lualine/lualine.nvim',
-  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-}
+-- Configuration for "lualine"
+require('lualine').setup({
+  options = {
+    theme = 'tokyonight'
+  }
+})
 ```
 
 然后直接保存进行安装。
@@ -456,4 +459,40 @@ require("lspconfig").lua_ls.setup {
 同样的:w进行保存。
 
 接着创建comment.lua和autopairs.lua这两个文件来进行配置。
+
+
+# 在云服务器上安装Neovim
+## 更新git版本
+需要添加ppa仓库才能安装新版本的git。 
+直接看博客。 
+
+
+# 森林的任务
+Bas_Customer：顾客表
+算了字段我就不分析了， 其他的应该是类似的；
+
+
+
+
+新表：dbo.oa_customer，一样是顾客表 旧表有；
+字段：
+id是十六进制的；
+code：有一个code，也是某种代码；
+customer_short_name 客户的名称，简写
+customer_name 全称
+地区id
+地区全名（如果是我我会另外建立一张表来解耦）
+客户地址： 这个字段我不明白为什么这么设计；
+sales_userid： 不知道是什么东西的id
+sales_username: 名字
+remark：谈论；评论；备注 
+
+py： 这个是什么东西啊
+is_use： 应该是一个布尔值，不知道有什么用（或者具体的）
+后面这些字段不想写了....
+
+旧表迁移到新表： 
+id -> id： 似乎是16进制到二进制
+customerCode -> customer_code： 差别应该不大...
+简称和全名： 这部分是一模一样的；
 
