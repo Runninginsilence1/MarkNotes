@@ -2,3 +2,4 @@
 修改gui界面的 home和end键盘为 
 leader + gh 和 leader 和 gl
 
+**use "jk" to go back NORMAL Mode quickly.**

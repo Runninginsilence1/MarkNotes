@@ -4,34 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "3523410cf038843b",
+        "id": "1461193d55ce8b58",
         "type": "tabs",
         "children": [
           {
-            "id": "47f3c77a6aba6b55",
+            "id": "ba0ebc289fff0c32",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "DRG成本系统的视频培训.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "7948349d16603a2b",
+            "id": "d194c322aac6e78a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "技术蛋老师的Vue教程.md",
+                "file": "成本系统v3实操.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -60,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "青空",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -76,8 +77,17 @@
               "type": "starred",
               "state": {}
             }
+          },
+          {
+            "id": "1116a0201a94211b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -97,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "成本系统v3实操.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "成本系统v3实操.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "成本系统v3实操.md"
               }
             }
           }
@@ -145,8 +155,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -158,17 +167,45 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "47f3c77a6aba6b55",
+  "active": "d194c322aac6e78a",
   "lastOpenFiles": [
-    "Python笔记.md",
-    "Python快速入门 By 教材.md",
+    "Pasted image 20230615103617.png",
+    "DRG成本系统的视频培训.md",
+    "成本系统v3实操.md",
+    "Pasted image 20230615101014.png",
+    "Pasted image 20230615100827.png",
+    "Pasted image 20230615100745.png",
+    "GO语言解码NCM格式的音乐文件.md",
+    "Heaven for Death存档记录.md",
+    "Pasted image 20230614154937.png",
+    "Pasted image 20230614143938.png",
+    "Pasted image 20230614110843.png",
+    "Pasted image 20230614101407.png",
+    "Pasted image 20230614093513.png",
+    "Pasted image 20230614092702.png",
+    "Pasted image 20230614085006.png",
+    "安卓逆向.md",
+    "【安德生】回安德生之后再考虑.md",
+    "油猴脚本相关.md",
+    "未命名 1.canvas",
+    "终极的C盘清理方案.md",
+    "安德生成本分摊.md",
+    "【安德生】医院成本核算规范.md",
+    "简历复制粘贴.md",
+    "青空の霞光 Spring Boot 3 + Vue 3.md",
+    "实战一个Docker镜像.md",
+    "数据库表结构的设计.md",
+    "任务清单.md",
+    "【毕业设计】后端.md",
+    "【毕业设计】论文.md",
+    "【桜都字幕组】Aegisub教程.md",
+    "简历技能.md",
+    "【毕业设计】书籍管理系统的后端接口.md",
     "Docker 青空の霞光.md",
-    "Vue教程.md",
-    "Shell.md",
-    "用Go撸一个Redis出来.md",
-    "Redis 青空の霞光.md",
-    "安卓教程.md",
-    "未命名.md",
-    "从零开始一个自己的JavaWeb项目.md"
+    "【研究生科研】使用Scopus进行科研实践的全过程.md",
+    "【幼麟实验室】你好~Goroutine.md",
+    "【字节青训营系列】Linux基础.md",
+    "【临时】Go语言的LeetCode刷题路.md",
+    "未命名.canvas"
   ]
 }

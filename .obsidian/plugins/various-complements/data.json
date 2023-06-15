@@ -1,0 +1,275 @@
+{
+  "strategy": "default",
+  "cedictPath": "./cedict_ts.u8",
+  "matchStrategy": "prefix",
+  "fuzzyMatch": true,
+  "matchingWithoutEmoji": true,
+  "treatAccentDiacriticsAsAlphabeticCharacters": false,
+  "maxNumberOfSuggestions": 5,
+  "maxNumberOfWordsAsPhrase": 3,
+  "minNumberOfCharactersTriggered": 0,
+  "minNumberOfWordsTriggeredPhrase": 1,
+  "complementAutomatically": true,
+  "delayMilliSeconds": 0,
+  "disableSuggestionsDuringImeOn": false,
+  "insertAfterCompletion": true,
+  "firstCharactersDisableSuggestions": ":/^",
+  "useCommonPrefixCompletionOfSuggestion": false,
+  "patternsToSuppressTrigger": [
+    "^~~~.*",
+    "^```.*"
+  ],
+  "showMatchStrategy": true,
+  "showComplementAutomatically": true,
+  "showIndexingStatus": true,
+  "descriptionOnSuggestion": "Short",
+  "selectSuggestionKeys": "Enter",
+  "additionalCycleThroughSuggestionsKeys": "None",
+  "disableUpDownKeysForCycleThroughSuggestionsKeys": false,
+  "openSourceFileKey": "None",
+  "propagateEsc": false,
+  "enableCurrentFileComplement": true,
+  "currentFileMinNumberOfCharacters": 0,
+  "onlyComplementEnglishOnCurrentFileComplement": false,
+  "enableCurrentVaultComplement": false,
+  "currentVaultMinNumberOfCharacters": 0,
+  "includeCurrentVaultPathPrefixPatterns": "",
+  "excludeCurrentVaultPathPrefixPatterns": "",
+  "includeCurrentVaultOnlyFilesUnderCurrentDirectory": false,
+  "enableCustomDictionaryComplement": false,
+  "customDictionaryPaths": "https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt",
+  "columnDelimiter": "Tab",
+  "customDictionaryWordRegexPattern": "",
+  "delimiterToHideSuggestion": "",
+  "delimiterToDivideSuggestionsForDisplayFromInsertion": "",
+  "caretLocationSymbolAfterComplement": "",
+  "displayedTextSuffix": " => ...",
+  "enableInternalLinkComplement": true,
+  "suggestInternalLinkWithAlias": false,
+  "excludeInternalLinkPathPrefixPatterns": "",
+  "updateInternalLinksOnSave": true,
+  "insertAliasTransformedFromDisplayedInternalLink": {
+    "enabled": false,
+    "beforeRegExp": "",
+    "after": ""
+  },
+  "enableFrontMatterComplement": true,
+  "frontMatterComplementMatchStrategy": "inherit",
+  "insertCommaAfterFrontMatterCompletion": false,
+  "intelligentSuggestionPrioritization": {
+    "maxDaysToKeepHistory": 30,
+    "maxNumberOfHistoryToKeep": 0
+  },
+  "disableOnMobile": false,
+  "showLogAboutPerformanceInConsole": false,
+  "selectionHistoryTree": {
+    "using": {
+      "using": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681525016629
+        }
+      }
+    },
+    "scopus使用英文进行检索": {
+      "scopus使用英文进行检索": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1681547688430
+        }
+      }
+    },
+    "./res//drawable/事务的acid.png": {
+      "./res//drawable/事务的acid.png": {
+        "internalLink": {
+          "count": 1,
+          "lastUpdated": 1681547329290
+        }
+      }
+    },
+    "计算机视觉": {
+      "计算机视觉": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681809827054
+        }
+      }
+    },
+    "用例图这里": {
+      "用例图这里": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1681870729065
+        }
+      }
+    },
+    "需求分析：可行性分析": {
+      "需求分析：可行性分析": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681871320598
+        }
+      }
+    },
+    "用例建模是实现系统需求分析的一个很好的方法，通过它可以使得系统分析员和客户之间能够更好地沟通系统的需求。它是一种用于描述软件系统功能的图形化工具，可以帮助开发者和其他利益相关者更好地了解系统的功能和行为，以及系统与其他角色之间的交互方式。在软件开发过程中，用例图通常是最早和最重要的一步，因为它直接关系到系统的功能和用户体验。": {
+      "用例建模是实现系统需求分析的一个很好的方法，通过它可以使得系统分析员和客户之间能够更好地沟通系统的需求。它是一种用于描述软件系统功能的图形化工具，可以帮助开发者和其他利益相关者更好地了解系统的功能和行为，以及系统与其他角色之间的交互方式。在软件开发过程中，用例图通常是最早和最重要的一步，因为它直接关系到系统的功能和用户体验。": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681874006486
+        }
+      }
+    },
+    "设计数据库表结构：基于实体和关系，需要设计数据库中的表结构。在这个系统中，可能需要创建的表包括人员表、工作室表、进出门表和出入记录表等。在每个表中，需要包含实体和属性，以及它们之间的关系。": {
+      "设计数据库表结构：基于实体和关系，需要设计数据库中的表结构。在这个系统中，可能需要创建的表包括人员表、工作室表、进出门表和出入记录表等。在每个表中，需要包含实体和属性，以及它们之间的关系。": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681881994905
+        }
+      }
+    },
+    "论文（使用ChatGpt作为辅助，是很好用，但是写论文本身还是很恶心）": {
+      "论文（使用ChatGpt作为辅助，是很好用，但是写论文本身还是很恶心）": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681954387357
+        }
+      }
+    },
+    "不需要与其他的系统集成，这是一个独立的系统。": {
+      "不需要与其他的系统集成，这是一个独立的系统。": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681966192359
+        }
+      }
+    },
+    "基于深度学习的工作室人流量统计系统设计与实现": {
+      "基于深度学习的工作室人流量统计系统设计与实现": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1681974713831
+        }
+      }
+    },
+    "entity": {
+      "entity": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682059440564
+        }
+      }
+    },
+    "service": {
+      "service": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682059450195
+        }
+      }
+    },
+    "servicecontroller": {
+      "servicecontroller": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682059452309
+        }
+      }
+    },
+    "工作室管理": {
+      "工作室管理": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682227224532
+        }
+      }
+    },
+    "所以现在的问题是：": {
+      "所以现在的问题是：": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682254198184
+        }
+      }
+    },
+    "关于Web的前后端的部分：": {
+      "关于Web的前后端的部分：": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682319214257
+        }
+      }
+    },
+    "数据库访问层设计：您需要设计一个适合您的应用程序的数据库访问层。您可以选择使用原始的JDBC": {
+      "数据库访问层设计：您需要设计一个适合您的应用程序的数据库访问层。您可以选择使用原始的JDBC": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682319342403
+        }
+      }
+    },
+    "MVC框架用作Web应用程序的前端。FreeMarker使用模板文件来定义页面布局和格式，然后通过填充数据模型来生成动态内容。": {
+      "MVC框架用作Web应用程序的前端。FreeMarker使用模板文件来定义页面布局和格式，然后通过填充数据模型来生成动态内容。": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682320091124
+        }
+      }
+    },
+    "TimeUtil": {
+      "TimeUtil": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682404612847
+        }
+      }
+    },
+    "Entity": {
+      "Entity": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682404862311
+        }
+      }
+    },
+    "Mybatis-plus分页": {
+      "Mybatis-plus分页": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682406878124
+        }
+      }
+    },
+    "SimpleDateFormat": {
+      "SimpleDateFormat": {
+        "currentFile": {
+          "count": 4,
+          "lastUpdated": 1682407487313
+        }
+      }
+    },
+    "木吉有氧，今天天气不错✔；手操✔；肝胆经；": {
+      "木吉有氧，今天天气不错✔；手操✔；肝胆经；": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682408839524
+        }
+      }
+    },
+    "ElementPlus": {
+      "ElementPlus": {
+        "currentFile": {
+          "count": 2,
+          "lastUpdated": 1682582439343
+        }
+      }
+    },
+    "element-plus": {
+      "element-plus": {
+        "currentFile": {
+          "count": 1,
+          "lastUpdated": 1682575381403
+        }
+      }
+    }
+  }
+}

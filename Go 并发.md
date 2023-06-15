@@ -9,6 +9,7 @@ go GetThingDone(param1, param2);
 //新建一个匿名方法并执行
 go func(param1, param2) {
 }(val1, val2)
+// 这个说法也有点那个
 
 //直接新建一个 goroutine 并在 goroutine 中执行代码块
 // 这种好像在 go 1.18中不可用
@@ -46,4 +47,3 @@ Go使用另外一种通信模型，消息机制。（顺便一提安卓的原生
 
 个人理解：channel的传参和函数有点类似，引用传递的话也是用指针。
 并且一个channel对应一个类型（类比 Unix的管道），可以**类型安全**
-

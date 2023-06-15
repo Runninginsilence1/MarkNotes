@@ -1,1 +1,9 @@
-{}
+{
+  "vimMode": false,
+  "spellcheck": true,
+  "spellcheckLanguages": [
+    "en"
+  ],
+  "promptDelete": true,
+  "trashOption": "none"
+}
