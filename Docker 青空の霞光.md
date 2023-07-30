@@ -586,6 +586,10 @@ docker run -m 内存限制 --memory-swap=内存和交换分区总共的内存限
 可以理解为docker的一个控制面板。
 
 # 容器编排：DockerCompose
+```
+我这里了解compose主要是为了部署那个音趴的服务。
+```
+
 比如现在我们要在一台主机上部署很多种类型的服务，包括数据库、消息队列、SpringBoot应用程序若干，或是想要搭建一个MySQL集群，这时我们就需要创建多个容器来完成来，但是我们希望能够实现一键部署，这时该怎么办呢？我们就要用到容器编排了，让多个容器按照我们自己的编排进行部署。 
 
 简单地说，就是用来管理容器的一个管理员。他负责让多个容器形成一个整体，和谐有序。
@@ -593,6 +597,7 @@ docker run -m 内存限制 --memory-swap=内存和交换分区总共的内存限
 要系统的学习的话，推荐看官方的文档：
 [Link](https://docs.docker.com/get-started/08_using_compose/)
 
+## 安装
 DockerCompose这玩意的安装独立于docker的安装，在 ubuntu环境下可以通过命令 `sudo apt install docker-compose-plugin
 `安装。
 

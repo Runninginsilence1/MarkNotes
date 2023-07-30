@@ -4,28 +4,40 @@
     "type": "split",
     "children": [
       {
-        "id": "1461193d55ce8b58",
+        "id": "06189cbd0ce57603",
         "type": "tabs",
         "children": [
           {
-            "id": "ba0ebc289fff0c32",
+            "id": "720fb9b3a72d5594",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "DRG成本系统的视频培训.md",
+                "file": "【Clash】内核和GUI相关的使用教程.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "d194c322aac6e78a",
+            "id": "7c2ee9fc42515023",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "成本系统v3实操.md",
+                "file": "【前端】Next.js.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ab781a6fc3571cdf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "【上古卷轴5】十周年之后的相关操作.md",
                 "mode": "source",
                 "source": false
               }
@@ -61,7 +73,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "path:clash",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -86,8 +98,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -107,7 +118,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "成本系统v3实操.md",
+                "file": "【前端】Next.js.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +135,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "成本系统v3实操.md",
+                "file": "【前端】Next.js.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,11 +158,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "成本系统v3实操.md"
+                "file": "【前端】Next.js.md"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -167,45 +179,47 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "d194c322aac6e78a",
+  "active": "7c2ee9fc42515023",
   "lastOpenFiles": [
-    "Pasted image 20230615103617.png",
-    "DRG成本系统的视频培训.md",
-    "成本系统v3实操.md",
-    "Pasted image 20230615101014.png",
-    "Pasted image 20230615100827.png",
-    "Pasted image 20230615100745.png",
-    "GO语言解码NCM格式的音乐文件.md",
-    "Heaven for Death存档记录.md",
-    "Pasted image 20230614154937.png",
-    "Pasted image 20230614143938.png",
-    "Pasted image 20230614110843.png",
-    "Pasted image 20230614101407.png",
-    "Pasted image 20230614093513.png",
-    "Pasted image 20230614092702.png",
-    "Pasted image 20230614085006.png",
-    "安卓逆向.md",
-    "【安德生】回安德生之后再考虑.md",
-    "油猴脚本相关.md",
-    "未命名 1.canvas",
-    "终极的C盘清理方案.md",
-    "安德生成本分摊.md",
-    "【安德生】医院成本核算规范.md",
-    "简历复制粘贴.md",
-    "青空の霞光 Spring Boot 3 + Vue 3.md",
-    "实战一个Docker镜像.md",
-    "数据库表结构的设计.md",
-    "任务清单.md",
-    "【毕业设计】后端.md",
-    "【毕业设计】论文.md",
-    "【桜都字幕组】Aegisub教程.md",
-    "简历技能.md",
-    "【毕业设计】书籍管理系统的后端接口.md",
-    "Docker 青空の霞光.md",
-    "【研究生科研】使用Scopus进行科研实践的全过程.md",
-    "【幼麟实验室】你好~Goroutine.md",
-    "【字节青训营系列】Linux基础.md",
+    "【删除】BIKA.md",
+    "【前端】Next.js.md",
+    "【临时】Go的map的实现原理.md",
+    "【临时】状态机.md",
+    "【都市求生系列】500块钱吃香喝辣.md",
+    "【番外】AI变革.md",
     "【临时】Go语言的LeetCode刷题路.md",
+    "【临时】七牛云的笔试和面经.md",
+    "Pasted image 20230729141620.png",
+    "Pasted image 20230729133000.png",
+    "【Clash】内核和GUI相关的使用教程.md",
+    "【上古卷轴5】十周年之后的相关操作.md",
+    "Pasted image 20230721191504.png",
+    "Pasted image 20230721182122.png",
+    "【教程】Linux利用ClashCore来访问外网环境.md",
+    "【音趴】网页上直接开启多人一起听歌 项目演示加部署.md",
+    "【ChatGPT】在笔记和写作和编程方面的用法.md",
+    "【TS】一个TS和Nextjs的教程.md",
+    "【Terminal】基于Warp和onmyzsh配置个性化终端.md",
+    "【网络编程】zinx框架.md",
+    "CSharp冷知识.md",
+    "TinyDocker.md",
+    "Git使用指南.md",
+    "求生之路2ast插件-readme.mc.md",
+    "acgn_pic 1.rar",
+    "acgn_pic.rar",
+    "【小徐先生】Golang网络IO模型之 epoll.md",
+    "常用GitHub工作流.md",
+    "CSS课程.md",
+    "技术蛋老师的虚拟机网络模式.md",
+    "Pasted image 20230712212857.png",
+    "Go 并发.md",
+    "自我介绍.md",
+    "Pasted image 20230706191947.png",
+    "Pasted image 20230706183904.png",
+    "Pasted image 20230706182002.png",
+    "Pasted image 20230706150820.png",
+    "Pasted image 20230703191757.png",
+    "未命名 1.canvas",
     "未命名.canvas"
   ]
 }

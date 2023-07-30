@@ -1,4 +1,53 @@
-# Go 并发
+# 番外：Rob Pike关于Go并发的演讲
+
+有一点能够确定：go在语言层面支持并发特性的，就是三个东西：goroutine、channel还有select。这是一个它的并发模型开发非常简单的证据之一。只不过，我并不是能很好的理解这种开发的思想。我还需要大量的训练。我认为，我不能急躁。我需要一定的时间来训练相关的东西。
+
+从CSP开始、goroutine的基本用法、Channel的基本用法（一个返回Channel的函数，这应该适用于调用方作为纯消费者的时候）（使用装饰器来进行扇入操作）
+
+Rob Pike提到的用法是：
+**生成器模式（Pattern）**
+如果并发协调由channel来控制，那么就生成它。很简单的使用。
+体现在代码中则是：定义好一个channel，然后使用go来启动一个生产者goroutine。
+在一个函数中定义好与channel相关的行为，然后将这个chan返回；
+其实time.After()这个函数就是这么做的，所以用在select里面可以做超时控制
+```go
+for {
+	select {
+		case v := <- c:
+			fmt.Println("Hello")
+		case timeout:=<-time.After(1 * time.Second):
+			fmt.Println("你已经结束了.")
+			// 看一下这个是什么类型的值
+			fmt.Printf("Type is %T\n", timeout)
+			return
+	}
+}
+```
+
+以上是定义好channel。如果有多个类似的channel，并且想让他们在准备就绪的情况下执行他们的行为，在不使用go自带的select的情况下，可以通过fan-in（扇入函数）实现一种类似于IO多路复用的效果：
+```go
+func fanIn(input1, input2 <-chan string) <-chan string {
+	mid := make(chan string)
+	go func() {for {mid <- <-input1}}
+	go func() {for {mid <- <-input2}}
+	return mid
+}
+```
+
+
+**select**的用法可以用一句话来总结：如果一个select中用来存放阻塞操作，并当阻塞解除了就运行对应的逻辑。如果整个结构的操作都是阻塞的，那么select就阻塞住了。
+
+那么基于time.After这个函数的超时控制就非常好理解了：
+它会返回一个channel，并且在指定的时间后channel就会接受到值。
+这样select就能解除阻塞，并且也实现了超时控制。
+
+
+## Google Search on Go Backend
+一个实际的，显示的需求，模拟Google引擎的后端搜索服务
+![[Pasted image 20230701163520.png]]
+
+
+
 
 # Goroutine
 **Goroutine的三种用法**

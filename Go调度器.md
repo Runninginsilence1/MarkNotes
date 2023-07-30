@@ -35,8 +35,6 @@ Goroutine的调度由Scheduler负责调度。指定运行Goroutine的实际的th
 # Scheduler的底层原理
 再次强调一下，站在操作系统的角度是**看不见Goroutine的存在的**。它仅仅是runtime时的概念。
 
-
-
 g 代表一个 goroutine，它包含：表示 goroutine 栈的一些字段，指示当前 goroutine 的**状态**，指示当前运行到的**指令地址**，也就是 PC 值。
 
 m 表示操作系统内核线程，包含正在运行的 goroutine 等字段。

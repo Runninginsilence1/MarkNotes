@@ -268,3 +268,8 @@ func main() {
 卡在这里吧！
 毕竟属于这一方面的知识。
 
+
+用聚合函数统计数量
+count
+然后用group来根据对应的分组
+select type, count(type) as num from table_name group by type order by num

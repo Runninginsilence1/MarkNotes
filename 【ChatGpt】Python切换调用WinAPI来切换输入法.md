@@ -20,4 +20,4 @@ ctypes.windll.imm32.ImmSetOpenStatus(ctypes.c_void_p(0), ctypes.c_bool(1))
 
 接着，通过调用`ImmSetOpenStatus()`函数切换输入法，将第二个参数设为True表示将输入法设置为中文输入法，False则表示将输入法设置为英文输入法。
 
-需要注意的是，这种方式只适用于Windows操作系统。而且，由于Python的跨平台特性，其他操作系统的实现方式可能会有所不同。
+需要注意的是，这种方式只适用于Windows操作系统。
