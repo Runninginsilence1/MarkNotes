@@ -8,43 +8,66 @@
         "type": "tabs",
         "children": [
           {
-            "id": "720fb9b3a72d5594",
+            "id": "b81a6c168df6d12a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "【Clash】内核和GUI相关的使用教程.md",
+                "file": "我见到的linux命令.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "7c2ee9fc42515023",
+            "id": "dcc9d06fce4db195",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "【前端】Next.js.md",
+                "file": "wvp 部署文档.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "ab781a6fc3571cdf",
+            "id": "00606eec74b92419",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "【上古卷轴5】十周年之后的相关操作.md",
+                "file": "Linux 中 alias命令用法总结.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b4e819f48fa28021",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Docker 青空の霞光.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "399333dcac294feb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "GitHub常见操作.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -73,7 +96,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "path:clash",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -118,7 +141,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "【前端】Next.js.md",
+                "file": "我见到的linux命令.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +158,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "【前端】Next.js.md",
+                "file": "我见到的linux命令.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +181,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "【前端】Next.js.md"
+                "file": "我见到的linux命令.md"
               }
             }
           }
@@ -167,59 +190,59 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
-      "canvas:新建白板": false,
-      "switcher:打开快速切换": false,
-      "graph:查看关系图谱": false,
-      "daily-notes:打开/创建今天的日记": false,
-      "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
     }
   },
-  "active": "7c2ee9fc42515023",
+  "active": "b81a6c168df6d12a",
   "lastOpenFiles": [
-    "【删除】BIKA.md",
-    "【前端】Next.js.md",
-    "【临时】Go的map的实现原理.md",
-    "【临时】状态机.md",
-    "【都市求生系列】500块钱吃香喝辣.md",
-    "【番外】AI变革.md",
-    "【临时】Go语言的LeetCode刷题路.md",
-    "【临时】七牛云的笔试和面经.md",
+    "GitHub常见操作.md",
+    "我见到的linux命令.md",
+    "wvp 部署文档.md",
+    "Linux 中 alias命令用法总结.md",
+    "复制粘贴区.md",
+    "在隔离环境下启动chrome.md",
+    "X Server： Ubuntu的图形化页面.md",
+    "VSCode代码片段功能.md",
+    "Docker 青空の霞光.md",
+    "Go语言结合vue编写一个小型的本地git客户端.md",
+    "命令行下操作的一些痛点.md",
+    "前端的一些知识点.md",
+    "【Linux】scp传输文件.md",
+    "GitHub速成.md",
+    "Git提交大文件.md",
+    "Git使用指南.md",
+    "常用GitHub工作流.md",
+    "测试git提交用.md",
+    "前端需求落地.md",
+    "【Clash】内核和GUI相关的使用教程.md",
+    "Linux Screen.md",
+    "安德生成本分摊.md",
+    "Vue3项目中进行测试.md",
+    "linux开机覆盖满屏幕.md",
+    "linux开机覆盖满屏幕 和 chrome隔离.md",
+    "【小徐先生】Golang HTTP 标准库实现原理和Gin的底层.md",
+    "未命名 1.canvas",
     "Pasted image 20230729141620.png",
     "Pasted image 20230729133000.png",
-    "【Clash】内核和GUI相关的使用教程.md",
-    "【上古卷轴5】十周年之后的相关操作.md",
     "Pasted image 20230721191504.png",
     "Pasted image 20230721182122.png",
-    "【教程】Linux利用ClashCore来访问外网环境.md",
-    "【音趴】网页上直接开启多人一起听歌 项目演示加部署.md",
-    "【ChatGPT】在笔记和写作和编程方面的用法.md",
-    "【TS】一个TS和Nextjs的教程.md",
-    "【Terminal】基于Warp和onmyzsh配置个性化终端.md",
-    "【网络编程】zinx框架.md",
-    "CSharp冷知识.md",
-    "TinyDocker.md",
-    "Git使用指南.md",
-    "求生之路2ast插件-readme.mc.md",
     "acgn_pic 1.rar",
     "acgn_pic.rar",
-    "【小徐先生】Golang网络IO模型之 epoll.md",
-    "常用GitHub工作流.md",
-    "CSS课程.md",
-    "技术蛋老师的虚拟机网络模式.md",
     "Pasted image 20230712212857.png",
-    "Go 并发.md",
-    "自我介绍.md",
     "Pasted image 20230706191947.png",
     "Pasted image 20230706183904.png",
     "Pasted image 20230706182002.png",
     "Pasted image 20230706150820.png",
     "Pasted image 20230703191757.png",
-    "未命名 1.canvas",
     "未命名.canvas"
   ]
 }

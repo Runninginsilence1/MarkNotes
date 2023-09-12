@@ -20,7 +20,7 @@ sudo apt-get install ca-certificates curl gnupg lsb-release
 
 然后去安装官方提供GPG签名；  
 个人感觉是类似于**安卓包管理的那种签名机制**。照他的来就好了，应该没有问题。
-```shell
+```sh
 sudo mkdir -p /etc/apt/keyrings
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
