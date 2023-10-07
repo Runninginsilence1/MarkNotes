@@ -13,7 +13,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "我见到的linux命令.md",
+                "file": "GitHub常见操作.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "38872e87b9cd5862",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "【都市求生系列】500块钱吃香喝辣.md",
                 "mode": "source",
                 "source": false
               }
@@ -67,7 +79,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -96,7 +109,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "超时",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -121,7 +134,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -141,7 +155,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "我见到的linux命令.md",
+                "file": "GitHub常见操作.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -158,7 +172,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "我见到的linux命令.md",
+                "file": "GitHub常见操作.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -181,7 +195,17 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "我见到的linux命令.md"
+                "file": "GitHub常见操作.md"
+              }
+            }
+          },
+          {
+            "id": "6b85e434644e8764",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency"
               }
             }
           }
@@ -202,10 +226,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b81a6c168df6d12a",
+  "active": "399333dcac294feb",
   "lastOpenFiles": [
-    "GitHub常见操作.md",
     "我见到的linux命令.md",
+    "大牛机子配置.md",
+    "求生之路2Linux开服.md",
+    "【都市求生系列】500块钱吃香喝辣.md",
+    "GitHub常见操作.md",
     "wvp 部署文档.md",
     "Linux 中 alias命令用法总结.md",
     "复制粘贴区.md",
@@ -227,9 +254,6 @@
     "Linux Screen.md",
     "安德生成本分摊.md",
     "Vue3项目中进行测试.md",
-    "linux开机覆盖满屏幕.md",
-    "linux开机覆盖满屏幕 和 chrome隔离.md",
-    "【小徐先生】Golang HTTP 标准库实现原理和Gin的底层.md",
     "未命名 1.canvas",
     "Pasted image 20230729141620.png",
     "Pasted image 20230729133000.png",

@@ -24,7 +24,7 @@
 ```shell
 sudo apt-get update   //更新apt-get，sudo用于临时提升权限，如果你有自信版本比较新，不用这个
 // 并且小心使用更新指令，怕你需要更新的软件特别多，你都不好取消，怕出问题
-apt-get install lib32gcc1  //安装依赖库，c++的
+apt-get install lib32gcc1  //安装依赖库，cpp的
 apt-get install screen   //安装screen
 ```
 对于centos的，换成 yum，然后c++用这一句：`yum install glibc.i686`

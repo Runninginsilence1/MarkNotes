@@ -36,6 +36,7 @@ alias命令的使用：
 如果需要参数的话： 代办
 
 
+# 运行通过ssh登录到root账户
 使用pass 修改了root的密码但是ssh还是无法登入进root：
 原因是因为ssh不允许通过root用户进行登录；
 ```bash
@@ -45,7 +46,7 @@ sudo vim /etc/ssh/sshd_config
 将 PermitRootLogin without-password 注释掉
 然后添加 PermitRootLogin yes
 
-然后重启 sshd
+然后重启 sshd：
 
 【知识点】配置 linux文件连接
 
@@ -84,6 +85,12 @@ sudo vim /etc/ssh/sshd_config
 - 如果你之前使用密码登录到服务器，现在应该能够使用SSH密钥登录。如果出现问题，你可以尝试使用`ssh -v`选项进行详细的调试。
 ```
 
+实际操作就是：
+`ssh-keygen -t rsa` 在你的操作端生成秘钥；
+然后进入~/.ssh中找到pub后缀的公钥，传输到远程服务器中。
+然后在远程服务器中 通过 cat 将秘钥添加到 ~/.ssh/aut 什么文件里面。 
+大功告成。
+
 # 文本处理三剑客
 
 ## grep
@@ -93,8 +100,63 @@ sudo vim /etc/ssh/sshd_config
 pattern 默认就是正则表达式。
 -i 不区分大小写
 -v 反向过滤
--C 3 显示匹配行以及上下文
+-C 3 显示匹配行以及上下文   -A就是上，-B就是下，很好理解。
+
 使用函数我觉得更好应该；
 
+
+# 环境变量
+
+环境变量是都可以访问到的变量。
+
+使用 export 就可以导出变量。 
+
+然后添加到环境变量的path，里面就可以直接访问到。
+格式为： `PATH=/path1:/path2:/path3`
+
+# 位置变量
+
+相当于函数获取参数
+一到九 直接为 `$9`， 更多的参数需要是 `${10}`，一般没有这么多参数
+
+`$*` 会把所有参数看成一个整体；
+`$@` 同样获取所有的参数，但是不会将他们拼成一个字符串。
+
+
+# 预定义变量
+
+预先定义好的变量，一般是一些状态、常用的值。
+
+`$$` 当前执行的进程 id
+`$!` 最后执行的后台进程的pid
+`$?` 上一个命令的执行状态
+``
+
+【知识点】使用 netstat 查看网络端口情况和对应的 process
+
+使用命令 `netstat -anp`
+
+【知识点】用户级别切换默认级别的shell
+
+这个就是直接选择用户目录下的 某一个shell，这里用fish举例子
+`chsh -s /usr/bin/fish`
+
+
+
+【知识点】使得 Screen启动的程序可以查看日志：
+
+screen是支持的，只不过默认没有打开。
+
+gpt说的是有效的。
+
+在你的用户目录下创建 `.screenrc文件`
+```sh
+termcapinfo xterm* ti@:te@
+termcapinfo xterm-color* ti@:te@
+defscrollback 10000
+```
+
+
+保存重启 screen 就可以看到效果了。
 
 
