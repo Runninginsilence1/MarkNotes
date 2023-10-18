@@ -34,25 +34,9 @@ git merge <源分支>
 `git stash drop` 单纯删除
 `git stash pop` 恢复并删除stash的结果，相当于先 apply，然后 drop
 
+# 恢复文件
 
-【知识点】如果你的 linux 可以访问 windows的C盘，那你可以修改它的注册表
+修改了文件或者暂存了文件，使用 `git restore --staged` （如果文件暂存）和 `git restore` 来恢复到这次提交之前。 该指令在 git 2.23以下无效。
 
-通过chntpw -e 打开这个命令行工具的简易终端，并且为 stdin和 stdout
-
-
-```sh
-#!/bin/bash
-
-# 使用chntpw编辑SYSTEM文件
-sudo chntpw -e /mnt/Windows/System32/config/SYSTEM <<EOF
-cd ControlSet001\Services
-nk WindowsPasswordSecurityCenter
-cd WindowsPasswordSecurityCenter
-nv 4 ErrorControl
-ed ErrorControl
-1
-q  # 退出编辑器
-y  # 保存修改
-EOF
-```
+git checkout则是比较底层的一个指令。 
 
